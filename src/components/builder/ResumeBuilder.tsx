@@ -6,11 +6,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Save, Download, Plus } from 'lucide-react';
+import { ArrowLeft, Save, Download, Plus, Sparkles } from 'lucide-react';
 import ResumeSection from './ResumeSection';
 import ResumePreview from './ResumePreview';
 import LanguageSelector from './LanguageSelector';
 import { useNavigate } from 'react-router-dom';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 type SectionType = {
   id: string;
@@ -65,6 +66,8 @@ const ResumeBuilder = () => {
   
   const [language, setLanguage] = useState('en-US');
   const [draggedSection, setDraggedSection] = useState<string | null>(null);
+  const [activeTemplate, setActiveTemplate] = useState('modern');
+  const [viewMode, setViewMode] = useState('desktop');
 
   const handleAddSection = (type: SectionType['type']) => {
     const newSection: SectionType = {
@@ -132,6 +135,30 @@ const ResumeBuilder = () => {
     });
   };
 
+  const handleAIEnhance = () => {
+    toast({
+      title: "AI Enhancement",
+      description: "Using AI to enhance your resume content...",
+    });
+    
+    // This would actually call an AI service in a real app
+    setTimeout(() => {
+      toast({
+        title: "Resume Enhanced",
+        description: "AI suggestions have been applied to your resume.",
+      });
+    }, 1500);
+  };
+
+  const availableTemplates = [
+    { id: 'modern', name: 'Modern', color: '#6366F1' },
+    { id: 'classic', name: 'Classic', color: '#10B981' },
+    { id: 'minimalist', name: 'Minimalist', color: '#6B7280' },
+    { id: 'creative', name: 'Creative', color: '#EC4899' },
+    { id: 'professional', name: 'Professional', color: '#3B82F6' },
+    { id: 'executive', name: 'Executive', color: '#8B5CF6' },
+  ];
+
   return (
     <div className="h-full flex flex-col animate-fade-in">
       <div className="flex items-center justify-between mb-6">
@@ -148,6 +175,10 @@ const ResumeBuilder = () => {
           />
         </div>
         <div className="flex items-center space-x-2">
+          <Button variant="outline" size="sm" onClick={handleAIEnhance}>
+            <Sparkles className="h-4 w-4 mr-2" />
+            AI Enhance
+          </Button>
           <LanguageSelector value={language} onChange={setLanguage} />
           <Button variant="outline" onClick={handleSave}>
             <Save className="h-4 w-4 mr-2" />
@@ -183,6 +214,7 @@ const ResumeBuilder = () => {
                       <ResumeSection 
                         section={section} 
                         onDragStart={() => handleDragStart(section.id)}
+                        showAISuggestions={true}
                       />
                       
                       {index === sections.length - 1 && (
@@ -230,11 +262,22 @@ const ResumeBuilder = () => {
             <TabsContent value="templates" className="h-[calc(100vh-14rem)]">
               <ScrollArea className="h-full">
                 <div className="grid grid-cols-2 gap-4 p-2">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <Card key={i} className="cursor-pointer hover:border-primary transition-colors">
-                      <CardContent className="h-60 flex items-center justify-center p-4">
-                        <div className="text-center text-muted-foreground">
-                          Template Preview {i + 1}
+                  {availableTemplates.map((template) => (
+                    <Card 
+                      key={template.id} 
+                      className={`cursor-pointer hover:border-primary transition-colors ${activeTemplate === template.id ? 'ring-2 ring-primary' : ''}`}
+                      onClick={() => setActiveTemplate(template.id)}
+                    >
+                      <CardContent className="h-60 flex items-center justify-center p-4 relative">
+                        <div className="absolute top-2 left-2">
+                          <div 
+                            className="h-3 w-3 rounded-full" 
+                            style={{ backgroundColor: template.color }}
+                          />
+                        </div>
+                        <div className="text-center">
+                          <p className="font-medium">{template.name}</p>
+                          <p className="text-sm text-muted-foreground">Template Preview</p>
                         </div>
                       </CardContent>
                     </Card>
@@ -252,18 +295,61 @@ const ResumeBuilder = () => {
             <div className="bg-muted p-2 flex items-center justify-between">
               <span className="text-sm font-medium">Preview</span>
               <div className="flex space-x-2">
-                <Button variant="ghost" size="sm">
-                  <span className="h-2 w-2 rounded-full bg-resumaker-500 mr-2"></span>
-                  Modern
-                </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <span className="h-2 w-2 rounded-full mr-2" style={{ 
+                        backgroundColor: availableTemplates.find(t => t.id === activeTemplate)?.color 
+                      }}></span>
+                      {availableTemplates.find(t => t.id === activeTemplate)?.name || 'Template'}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-56 p-2" align="end">
+                    <div className="grid grid-cols-2 gap-2">
+                      {availableTemplates.map(template => (
+                        <Button
+                          key={template.id}
+                          variant={activeTemplate === template.id ? "default" : "outline"}
+                          size="sm"
+                          className="justify-start"
+                          onClick={() => setActiveTemplate(template.id)}
+                        >
+                          <span className="h-2 w-2 rounded-full mr-2" style={{ backgroundColor: template.color }}></span>
+                          {template.name}
+                        </Button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
                 <Separator orientation="vertical" />
-                <Button variant="ghost" size="sm">
-                  Desktop
-                </Button>
+                <div className="flex bg-background/50 rounded-md p-1">
+                  <Button 
+                    variant={viewMode === 'desktop' ? 'secondary' : 'ghost'} 
+                    size="sm"
+                    onClick={() => setViewMode('desktop')}
+                    className="text-xs px-2"
+                  >
+                    Desktop
+                  </Button>
+                  <Button 
+                    variant={viewMode === 'mobile' ? 'secondary' : 'ghost'} 
+                    size="sm"
+                    onClick={() => setViewMode('mobile')}
+                    className="text-xs px-2"
+                  >
+                    Mobile
+                  </Button>
+                </div>
               </div>
             </div>
             <ScrollArea className="h-[calc(100%-2.5rem)]">
-              <ResumePreview sections={sections} language={language} />
+              <div className={`transition-all ${viewMode === 'mobile' ? 'max-w-[414px] mx-auto' : 'w-full'}`}>
+                <ResumePreview 
+                  sections={sections} 
+                  language={language} 
+                  template={activeTemplate}
+                />
+              </div>
             </ScrollArea>
           </div>
         </div>
