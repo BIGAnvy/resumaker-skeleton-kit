@@ -1,4 +1,3 @@
-
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 
@@ -534,7 +533,7 @@ const ResumePreview = ({ sections, language, template = 'modern' }: ResumePrevie
           <div className="grid grid-cols-2 gap-2 mt-2">
             {skillsSection.content.skills?.map((skill: string, index: number) => (
               <div key={index} className="flex items-center gap-2">
-                <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
+                <div className="h-1 w-1 rounded-full bg-primary"></div>
                 <span className="text-sm">{skill}</span>
               </div>
             ))}

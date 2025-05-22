@@ -5,13 +5,24 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { SendHorizontal, User, Sparkles } from 'lucide-react';
+import { SendHorizontal, User, Sparkles, Upload, Link, Clock, AlertCircle, CheckCircle, PlusCircle, Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Progress } from '@/components/ui/progress';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
+import { Label } from '@/components/ui/label';
 
 type Message = {
   id: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: Date;
+  status?: 'sending' | 'error' | 'success';
+  attachments?: { type: 'file' | 'link'; name: string; url?: string }[];
 };
 
 type WizardStep = {
@@ -35,7 +46,10 @@ const AIChatWizard = () => {
   
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [progressValue, setProgressValue] = useState(0);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const wizardSteps: WizardStep[] = [
     {
@@ -76,6 +90,13 @@ const AIChatWizard = () => {
     }
   ];
 
+  const suggestions = [
+    "I graduated from University of Technology with a Computer Science degree in 2020.",
+    "I have 3 years experience as a Frontend Developer at TechCorp.",
+    "My skills include JavaScript, React, and UI/UX design.",
+    "I'm looking for a senior position in software development."
+  ];
+
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -85,7 +106,10 @@ const AIChatWizard = () => {
     if (messages.length === 1) {
       simulateAIResponse(wizardSteps[0].question);
     }
-  }, []);
+    
+    // Set progress based on current step
+    setProgressValue(((currentStep + 1) / wizardSteps.length) * 100);
+  }, [currentStep]);
 
   const simulateAIResponse = (content: string, delay = 500) => {
     setTimeout(() => {
@@ -95,7 +119,8 @@ const AIChatWizard = () => {
           id: Date.now().toString(),
           role: 'assistant',
           content,
-          timestamp: new Date()
+          timestamp: new Date(),
+          status: 'success'
         }
       ]);
       setIsGenerating(false);
@@ -110,12 +135,14 @@ const AIChatWizard = () => {
       id: Date.now().toString(),
       role: 'user' as const,
       content: input,
-      timestamp: new Date()
+      timestamp: new Date(),
+      status: 'success'
     };
     
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsGenerating(true);
+    setShowSuggestions(false);
     
     // Process the next step
     const nextStep = currentStep + 1;
@@ -149,6 +176,47 @@ const AIChatWizard = () => {
     }
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Create a message with file attachment (in a real app, this would upload the file)
+    const fileMessage = {
+      id: Date.now().toString(),
+      role: 'user' as const,
+      content: `I'm attaching my ${file.name} for reference.`,
+      timestamp: new Date(),
+      attachments: [{ type: 'file' as const, name: file.name }]
+    };
+
+    setMessages(prev => [...prev, fileMessage]);
+    setIsGenerating(true);
+
+    // Simulate processing the file
+    setTimeout(() => {
+      simulateAIResponse(`Thanks for sharing ${file.name}. I've extracted relevant information from it and will use it to help build your resume.`);
+    }, 1500);
+  };
+
+  const handleUseSuggestion = (suggestion: string) => {
+    setInput(suggestion);
+    setShowSuggestions(false);
+  };
+
+  const handleRetry = (messageId: string) => {
+    const messageIndex = messages.findIndex(m => m.id === messageId);
+    if (messageIndex === -1) return;
+
+    // Get the message content
+    const messageContent = messages[messageIndex].content;
+    
+    // Remove all messages after this one
+    const newMessages = messages.slice(0, messageIndex);
+    
+    setMessages(newMessages);
+    setInput(messageContent);
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)] animate-fade-in max-w-4xl mx-auto">
       <div className="mb-4">
@@ -158,9 +226,33 @@ const AIChatWizard = () => {
       
       <Card className="flex-1 flex flex-col overflow-hidden">
         <CardHeader className="bg-muted py-2">
-          <CardTitle className="text-base flex items-center">
-            <Sparkles className="h-4 w-4 mr-2 text-primary" />
-            Resume Assistant
+          <CardTitle className="text-base flex items-center justify-between">
+            <div className="flex items-center">
+              <Sparkles className="h-4 w-4 mr-2 text-primary" />
+              Resume Assistant
+            </div>
+            <div className="flex items-center space-x-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Clock className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>View chat history</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Help & tips</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </CardTitle>
         </CardHeader>
         
@@ -178,9 +270,26 @@ const AIChatWizard = () => {
                   `}
                 >
                   {message.role === 'user' && (
-                    <div className="flex items-center mb-1">
-                      <User className="h-3 w-3 mr-1" />
-                      <span className="text-xs font-medium">You</span>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center">
+                        <User className="h-3 w-3 mr-1" />
+                        <span className="text-xs font-medium">You</span>
+                      </div>
+                      
+                      {message.status === 'error' && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                              <AlertCircle className="h-3 w-3 text-destructive" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleRetry(message.id)}>
+                              Retry
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
                     </div>
                   )}
                   
@@ -193,7 +302,25 @@ const AIChatWizard = () => {
                   
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   
-                  <div className="text-xs opacity-70 text-right mt-1">
+                  {message.attachments?.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      {message.attachments.map((attachment, i) => (
+                        <div key={i} className="flex items-center text-xs p-1 bg-background/50 rounded">
+                          {attachment.type === 'file' ? (
+                            <Upload className="h-3 w-3 mr-1" />
+                          ) : (
+                            <Link className="h-3 w-3 mr-1" />
+                          )}
+                          <span>{attachment.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div className="text-xs opacity-70 text-right mt-1 flex items-center justify-end">
+                    {message.status === 'success' && message.role === 'assistant' && (
+                      <CheckCircle className="h-3 w-3 mr-1 text-green-500" />
+                    )}
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>
                 </div>
@@ -216,46 +343,96 @@ const AIChatWizard = () => {
           </div>
         </ScrollArea>
         
+        {showSuggestions && (
+          <div className="px-4 py-2 border-t border-border">
+            <p className="text-xs font-medium mb-2">Suggestions:</p>
+            <div className="flex flex-wrap gap-2">
+              {suggestions.map((suggestion, index) => (
+                <Button 
+                  key={index} 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => handleUseSuggestion(suggestion)}
+                  className="text-xs"
+                >
+                  {suggestion.length > 30 ? `${suggestion.substring(0, 30)}...` : suggestion}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
+        
         <CardFooter className="border-t p-4">
-          <form 
-            className="flex w-full items-center space-x-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-          >
-            <Textarea 
-              placeholder="Type your message..."
-              className="flex-1"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={isGenerating}
-              rows={1}
-            />
-            <Button 
-              type="submit" 
-              size="icon"
-              disabled={isGenerating || !input.trim()}
+          <div className="w-full space-y-2">
+            <form 
+              className="flex w-full items-center space-x-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSendMessage();
+              }}
             >
-              <SendHorizontal className="h-4 w-4" />
-              <span className="sr-only">Send</span>
-            </Button>
-          </form>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                className="hidden" 
+                onChange={handleFileUpload}
+                accept=".pdf,.doc,.docx"
+              />
+              <Button 
+                type="button" 
+                size="icon"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isGenerating}
+                className="flex-shrink-0"
+              >
+                <Upload className="h-4 w-4" />
+                <span className="sr-only">Upload file</span>
+              </Button>
+              
+              <Textarea 
+                placeholder="Type your message..."
+                className="flex-1 min-h-10"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={isGenerating}
+                rows={1}
+              />
+              
+              <Button 
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => setShowSuggestions(!showSuggestions)}
+                disabled={isGenerating}
+                className="flex-shrink-0"
+              >
+                <PlusCircle className="h-4 w-4" />
+                <span className="sr-only">Show suggestions</span>
+              </Button>
+              
+              <Button 
+                type="submit" 
+                size="icon"
+                disabled={isGenerating || !input.trim()}
+                className="flex-shrink-0"
+              >
+                <SendHorizontal className="h-4 w-4" />
+                <span className="sr-only">Send</span>
+              </Button>
+            </form>
+            
+            <div className="w-full">
+              <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                <span>Step {currentStep + 1} of {wizardSteps.length} • {wizardSteps[currentStep]?.title}</span>
+                <span>{Math.round(progressValue)}% Complete</span>
+              </div>
+              <Progress value={progressValue} className="h-1" />
+            </div>
+          </div>
         </CardFooter>
       </Card>
-      
-      <div className="mt-4">
-        <p className="text-sm text-muted-foreground">
-          Step {currentStep + 1} of {wizardSteps.length} • {wizardSteps[currentStep]?.title}
-        </p>
-        <div className="w-full bg-muted h-1.5 mt-1 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-primary transition-all duration-500"
-            style={{ width: `${((currentStep + 1) / wizardSteps.length) * 100}%` }}
-          ></div>
-        </div>
-      </div>
     </div>
   );
 };

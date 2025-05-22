@@ -1,17 +1,31 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Save, Download, Plus, Sparkles } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  Save, 
+  Download, 
+  Plus, 
+  Sparkles, 
+  Settings,
+  Share2,
+  AlertTriangle
+} from 'lucide-react';
 import ResumeSection from './ResumeSection';
 import ResumePreview from './ResumePreview';
 import LanguageSelector from './LanguageSelector';
 import { useNavigate } from 'react-router-dom';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import VersionHistory from '../version/VersionHistory';
+import TagInput from '../inputs/TagInput';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import ExportOptions from '../export/ExportOptions';
+import ErrorFallback from '../ui/error-fallback';
 
 type SectionType = {
   id: string;
@@ -64,10 +78,16 @@ const ResumeBuilder = () => {
     }
   ]);
   
+  const [resumeTitle, setResumeTitle] = useState('Software Engineer Resume');
   const [language, setLanguage] = useState('en-US');
   const [draggedSection, setDraggedSection] = useState<string | null>(null);
   const [activeTemplate, setActiveTemplate] = useState('modern');
   const [viewMode, setViewMode] = useState('desktop');
+  const [lastSaved, setLastSaved] = useState<Date | null>(new Date());
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
 
   const handleAddSection = (type: SectionType['type']) => {
     const newSection: SectionType = {
@@ -133,6 +153,7 @@ const ResumeBuilder = () => {
       title: "Resume saved",
       description: "Your resume has been saved successfully.",
     });
+    setLastSaved(new Date());
   };
 
   const handleAIEnhance = () => {
@@ -149,6 +170,35 @@ const ResumeBuilder = () => {
       });
     }, 1500);
   };
+  
+  const handleShare = () => {
+    toast({
+      title: "Share link created",
+      description: "A shareable link has been copied to your clipboard.",
+    });
+  };
+  
+  // Simulate auto-saving
+  useEffect(() => {
+    const autoSaveInterval = setInterval(() => {
+      // In a real app, we'd check if there are changes before saving
+      const now = new Date();
+      setLastSaved(now);
+    }, 60000); // Auto-save every minute
+    
+    return () => clearInterval(autoSaveInterval);
+  }, []);
+  
+  // Simulate error for demo purposes
+  const simulateError = () => {
+    setHasError(true);
+    setError(new Error("Failed to load template data. Please try again."));
+  };
+  
+  const resetError = () => {
+    setHasError(false);
+    setError(null);
+  };
 
   const availableTemplates = [
     { id: 'modern', name: 'Modern', color: '#6366F1' },
@@ -157,6 +207,13 @@ const ResumeBuilder = () => {
     { id: 'creative', name: 'Creative', color: '#EC4899' },
     { id: 'professional', name: 'Professional', color: '#3B82F6' },
     { id: 'executive', name: 'Executive', color: '#8B5CF6' },
+  ];
+  
+  // Example skills for tag input
+  const skillsSuggestions = [
+    "JavaScript", "React", "TypeScript", "HTML", "CSS", "Node.js", "Python",
+    "SQL", "GraphQL", "AWS", "Docker", "Kubernetes", "CI/CD", "Git",
+    "Agile", "Scrum", "Project Management", "Team Leadership", "Communication"
   ];
 
   return (
@@ -171,7 +228,8 @@ const ResumeBuilder = () => {
             type="text"
             placeholder="Resume Title"
             className="ml-4 bg-transparent border-b border-border focus:outline-none focus:border-primary px-2 py-1 text-lg"
-            defaultValue="Software Engineer Resume"
+            value={resumeTitle}
+            onChange={(e) => setResumeTitle(e.target.value)}
           />
         </div>
         <div className="flex items-center space-x-2">
@@ -184,10 +242,21 @@ const ResumeBuilder = () => {
             <Save className="h-4 w-4 mr-2" />
             Save
           </Button>
-          <Button>
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
+          <Dialog open={showExportDialog} onOpenChange={setShowExportDialog}>
+            <DialogTrigger asChild>
+              <Button>
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px] p-0">
+              <ExportOptions 
+                documentType="resume" 
+                documentTitle={resumeTitle} 
+                onClose={() => setShowExportDialog(false)}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
       
@@ -200,63 +269,122 @@ const ResumeBuilder = () => {
             </TabsList>
             
             <TabsContent value="editor" className="flex-1 h-[calc(100vh-14rem)]">
-              <ScrollArea className="h-full">
-                <div className="space-y-4 p-2">
-                  {sections.map((section, index) => (
-                    <div key={section.id}>
-                      <div 
-                        className="resumaker-droppable"
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        onDrop={(e) => handleDrop(e, index)}
-                      ></div>
-                      
-                      <ResumeSection 
-                        section={section} 
-                        onDragStart={() => handleDragStart(section.id)}
-                        showAISuggestions={true}
-                      />
-                      
-                      {index === sections.length - 1 && (
+              <div className="flex justify-between items-center mb-2">
+                <VersionHistory 
+                  documentType="resume" 
+                  documentId="1" 
+                  lastSaved={lastSaved}
+                />
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-xs"
+                  onClick={() => simulateError()}
+                >
+                  <AlertTriangle className="h-3 w-3 mr-1" />
+                  Simulate Error
+                </Button>
+              </div>
+              
+              {hasError ? (
+                <ErrorFallback
+                  error={error}
+                  resetError={resetError}
+                  message="Failed to load resume data"
+                  severity="warning"
+                  actionText="Retry Loading"
+                  actionFn={resetError}
+                />
+              ) : (
+                <ScrollArea className="h-full">
+                  <div className="space-y-4 p-2">
+                    {sections.map((section, index) => (
+                      <div key={section.id}>
                         <div 
                           className="resumaker-droppable"
                           onDragOver={handleDragOver}
                           onDragLeave={handleDragLeave}
-                          onDrop={(e) => handleDrop(e, index + 1)}
+                          onDrop={(e) => handleDrop(e, index)}
                         ></div>
-                      )}
-                    </div>
-                  ))}
-                  
-                  <Card className="mt-6">
-                    <CardContent className="p-4">
-                      <h3 className="text-sm font-medium mb-2">Add Section</h3>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handleAddSection('experience')}>
-                          <Plus className="h-3 w-3 mr-1" />
-                          Experience
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleAddSection('education')}>
-                          <Plus className="h-3 w-3 mr-1" />
-                          Education
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleAddSection('skills')}>
-                          <Plus className="h-3 w-3 mr-1" />
-                          Skills
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleAddSection('projects')}>
-                          <Plus className="h-3 w-3 mr-1" />
-                          Projects
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleAddSection('custom')}>
-                          <Plus className="h-3 w-3 mr-1" />
-                          Custom
-                        </Button>
+                        
+                        <ResumeSection 
+                          section={section} 
+                          onDragStart={() => handleDragStart(section.id)}
+                          showAISuggestions={true}
+                        />
+                        
+                        {index === sections.length - 1 && (
+                          <div 
+                            className="resumaker-droppable"
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                            onDrop={(e) => handleDrop(e, index + 1)}
+                          ></div>
+                        )}
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </ScrollArea>
+                    ))}
+                    
+                    <Card className="mt-6">
+                      <CardContent className="p-4">
+                        <h3 className="text-sm font-medium mb-2">Add Section</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          <Button variant="outline" size="sm" onClick={() => handleAddSection('experience')}>
+                            <Plus className="h-3 w-3 mr-1" />
+                            Experience
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleAddSection('education')}>
+                            <Plus className="h-3 w-3 mr-1" />
+                            Education
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleAddSection('skills')}>
+                            <Plus className="h-3 w-3 mr-1" />
+                            Skills
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleAddSection('projects')}>
+                            <Plus className="h-3 w-3 mr-1" />
+                            Projects
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleAddSection('custom')}>
+                            <Plus className="h-3 w-3 mr-1" />
+                            Custom
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card className="mt-4">
+                      <CardContent className="p-4">
+                        <h3 className="text-sm font-medium mb-2">Skills Tags</h3>
+                        <TagInput
+                          tags={['JavaScript', 'React', 'TypeScript']}
+                          onChange={(tags) => {
+                            // In a real app, we'd update the skills section with these tags
+                            console.log('Skills updated:', tags);
+                          }}
+                          suggestions={skillsSuggestions}
+                          placeholder="Add a skill..."
+                          maxTags={20}
+                        />
+                      </CardContent>
+                    </Card>
+                    
+                    <Card className="mt-4">
+                      <CardContent className="p-4 flex justify-between items-center">
+                        <div>
+                          <h3 className="text-sm font-medium">Share Resume</h3>
+                          <p className="text-xs text-muted-foreground">
+                            Create a public link to share your resume
+                          </p>
+                        </div>
+                        <Button size="sm" onClick={handleShare} variant="outline">
+                          <Share2 className="h-4 w-4 mr-2" />
+                          Share
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </ScrollArea>
+              )}
             </TabsContent>
             
             <TabsContent value="templates" className="h-[calc(100vh-14rem)]">
@@ -340,6 +468,9 @@ const ResumeBuilder = () => {
                     Mobile
                   </Button>
                 </div>
+                <Button variant="ghost" size="sm">
+                  <Settings className="h-4 w-4" />
+                </Button>
               </div>
             </div>
             <ScrollArea className="h-[calc(100%-2.5rem)]">
