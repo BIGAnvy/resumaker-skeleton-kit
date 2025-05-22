@@ -1,4 +1,6 @@
+
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 
 type ResumePreviewProps = {
   sections: Array<{
