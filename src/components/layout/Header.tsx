@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Menu, Bell, User, Search, HelpCircle, X, LogOut, Settings } from 'lucide-react';
 import ThemeToggle from '../theme/ThemeToggle';
 import { Input } from '@/components/ui/input';
+import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +29,7 @@ type HeaderProps = {
 
 const Header = ({ toggleSidebar, sidebarCollapsed }: HeaderProps) => {
   const [showSearch, setShowSearch] = useState(false);
+  const navigate = useNavigate();
   
   return (
     <header className="border-b h-14 flex items-center justify-between px-4 bg-card">
@@ -90,6 +92,9 @@ const Header = ({ toggleSidebar, sidebarCollapsed }: HeaderProps) => {
               </SheetDescription>
             </SheetHeader>
             <div className="grid gap-4 py-4">
+              <Button variant="outline" className="justify-start" onClick={() => navigate('/ai-wizard')}>
+                AI Resume Assistant
+              </Button>
               <Button variant="outline" className="justify-start">
                 View tutorials
               </Button>
@@ -159,16 +164,16 @@ const Header = ({ toggleSidebar, sidebarCollapsed }: HeaderProps) => {
               </div>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/profile')}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/settings')}>
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/')}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>

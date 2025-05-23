@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Copy, Trash, Edit, Download } from "lucide-react";
+import { Plus, Copy, Trash, Edit, Download, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 type Document = {
   id: string;
@@ -15,6 +16,7 @@ type Document = {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   // Demo data for the UI skeleton
   const [documents, setDocuments] = useState<Document[]>([
@@ -24,12 +26,33 @@ const Dashboard = () => {
   ]);
 
   const handleCreateNew = (type: "resume" | "coverLetter") => {
-    // In a real app, we would create a new document and navigate to the editor
     if (type === "resume") {
       navigate("/resume-builder/new");
     } else {
       navigate("/cover-letter/new");
     }
+  };
+
+  const handleCopy = (doc: Document) => {
+    toast({
+      title: "Document copied",
+      description: `${doc.title} has been copied successfully.`,
+    });
+  };
+
+  const handleDownload = (doc: Document) => {
+    toast({
+      title: "Download started",
+      description: `Downloading ${doc.title}...`,
+    });
+  };
+
+  const handleDelete = (docId: string) => {
+    setDocuments(docs => docs.filter(doc => doc.id !== docId));
+    toast({
+      title: "Document deleted",
+      description: "The document has been moved to trash.",
+    });
   };
 
   return (
@@ -48,6 +71,10 @@ const Dashboard = () => {
             <Plus className="mr-2 h-4 w-4" />
             New Cover Letter
           </Button>
+          <Button variant="outline" onClick={() => navigate("/ai-wizard")}>
+            <Sparkles className="mr-2 h-4 w-4" />
+            AI Assistant
+          </Button>
         </div>
       </div>
       
@@ -55,7 +82,7 @@ const Dashboard = () => {
         <TabsList>
           <TabsTrigger value="resumes">Resumes</TabsTrigger>
           <TabsTrigger value="coverLetters">Cover Letters</TabsTrigger>
-          <TabsTrigger value="templates">Templates</TabsTrigger>
+          <TabsTrigger value="templates" onClick={() => navigate("/templates")}>Templates</TabsTrigger>
         </TabsList>
         
         <TabsContent value="resumes" className="mt-6">
@@ -75,13 +102,13 @@ const Dashboard = () => {
                     Edit
                   </Button>
                   <div className="flex space-x-1">
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" onClick={() => handleCopy(doc)}>
                       <Copy className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" onClick={() => handleDownload(doc)}>
                       <Download className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-destructive">
+                    <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(doc.id)}>
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>
@@ -117,13 +144,13 @@ const Dashboard = () => {
                     Edit
                   </Button>
                   <div className="flex space-x-1">
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" onClick={() => handleCopy(doc)}>
                       <Copy className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" onClick={() => handleDownload(doc)}>
                       <Download className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-destructive">
+                    <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(doc.id)}>
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>
@@ -143,19 +170,11 @@ const Dashboard = () => {
         </TabsContent>
         
         <TabsContent value="templates" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <Card key={i}>
-                <CardContent className="h-40 border border-dashed border-muted rounded-md mt-6 flex items-center justify-center text-muted-foreground">
-                  Template Preview {i + 1}
-                </CardContent>
-                <CardFooter className="pt-4">
-                  <Button variant="outline" size="sm" className="w-full">
-                    Use Template
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+          <div className="text-center py-8">
+            <p className="text-muted-foreground mb-4">Browse our collection of professional templates</p>
+            <Button onClick={() => navigate("/templates")}>
+              View Template Gallery
+            </Button>
           </div>
         </TabsContent>
       </Tabs>

@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { HomeIcon, User, FileText, Mail, Settings } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 type SidebarProps = {
   collapsed: boolean;
@@ -32,6 +32,15 @@ const NavItem = ({ icon: Icon, label, href, active = false, collapsed }: NavItem
 );
 
 const Sidebar = ({ collapsed }: SidebarProps) => {
+  const location = useLocation();
+  
+  const isActive = (path: string) => {
+    if (path === "/dashboard") {
+      return location.pathname === "/" || location.pathname === "/dashboard";
+    }
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <div className={cn("resumaker-sidebar", collapsed && "collapsed")}>
       <div className="flex flex-col h-full">
@@ -42,11 +51,41 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
         )}
         
         <nav className="p-2 space-y-1 flex-1">
-          <NavItem icon={HomeIcon} label="Dashboard" href="/" active={true} collapsed={collapsed} />
-          <NavItem icon={FileText} label="Resumes" href="/resumes" collapsed={collapsed} />
-          <NavItem icon={Mail} label="Cover Letters" href="/cover-letters" collapsed={collapsed} />
-          <NavItem icon={User} label="Profile" href="/profile" collapsed={collapsed} />
-          <NavItem icon={Settings} label="Settings" href="/settings" collapsed={collapsed} />
+          <NavItem 
+            icon={HomeIcon} 
+            label="Dashboard" 
+            href="/dashboard" 
+            active={isActive("/dashboard")} 
+            collapsed={collapsed} 
+          />
+          <NavItem 
+            icon={FileText} 
+            label="Resumes" 
+            href="/resumes" 
+            active={isActive("/resumes")} 
+            collapsed={collapsed} 
+          />
+          <NavItem 
+            icon={Mail} 
+            label="Cover Letters" 
+            href="/cover-letters" 
+            active={isActive("/cover-letters")} 
+            collapsed={collapsed} 
+          />
+          <NavItem 
+            icon={User} 
+            label="Profile" 
+            href="/profile" 
+            active={isActive("/profile")} 
+            collapsed={collapsed} 
+          />
+          <NavItem 
+            icon={Settings} 
+            label="Settings" 
+            href="/settings" 
+            active={isActive("/settings")} 
+            collapsed={collapsed} 
+          />
         </nav>
         
         <div className="p-4 border-t border-border mt-auto">

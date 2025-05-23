@@ -7,6 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DashboardPage from "./pages/DashboardPage";
+import ResumesPage from "./pages/ResumesPage";
+import CoverLettersPage from "./pages/CoverLettersPage";
+import ProfilePage from "./pages/ProfilePage";
 import ResumeBuilderPage from "./pages/ResumeBuilderPage";
 import SettingsPage from "./pages/SettingsPage";
 import CoverLetterEditorPage from "./pages/CoverLetterEditorPage";
@@ -26,6 +29,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/resumes" element={<ResumesPage />} />
+          <Route path="/cover-letters" element={<CoverLettersPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/resume-builder/:id" element={<ResumeBuilderPage />} />
           <Route path="/resume-builder/new" element={<ResumeBuilderPage />} />
           <Route path="/cover-letter/:id" element={<CoverLetterEditorPage />} />
