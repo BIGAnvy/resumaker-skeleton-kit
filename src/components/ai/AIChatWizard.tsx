@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -120,7 +119,7 @@ const AIChatWizard = () => {
           role: 'assistant',
           content,
           timestamp: new Date(),
-          status: 'success'
+          status: 'success' as const
         }
       ]);
       setIsGenerating(false);
@@ -131,12 +130,12 @@ const AIChatWizard = () => {
     if (!input.trim()) return;
     
     // Add user message
-    const userMessage = {
+    const userMessage: Message = {
       id: Date.now().toString(),
-      role: 'user' as const,
+      role: 'user',
       content: input,
       timestamp: new Date(),
-      status: 'success'
+      status: 'success' as const
     };
     
     setMessages(prev => [...prev, userMessage]);
@@ -181,12 +180,12 @@ const AIChatWizard = () => {
     if (!file) return;
 
     // Create a message with file attachment (in a real app, this would upload the file)
-    const fileMessage = {
+    const fileMessage: Message = {
       id: Date.now().toString(),
-      role: 'user' as const,
+      role: 'user',
       content: `I'm attaching my ${file.name} for reference.`,
       timestamp: new Date(),
-      attachments: [{ type: 'file' as const, name: file.name }]
+      attachments: [{ type: 'file', name: file.name }]
     };
 
     setMessages(prev => [...prev, fileMessage]);

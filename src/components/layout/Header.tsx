@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, Bell, User, Search, HelpCircle } from 'lucide-react';
+import { Menu, Bell, User, Search, HelpCircle, X, LogOut, Settings } from 'lucide-react';
 import ThemeToggle from '../theme/ThemeToggle';
 import { Input } from '@/components/ui/input';
 import {
@@ -47,21 +47,21 @@ const Header = ({ toggleSidebar, sidebarCollapsed }: HeaderProps) => {
         ${showSearch ? 'flex items-center h-14' : 'hidden'}
         md:static md:bg-transparent md:p-0 md:flex md:w-1/3 md:max-w-md
       `}>
-        <Input 
-          placeholder="Search resumes, templates..." 
-          className="h-9"
-          startIcon={<Search className="h-4 w-4 text-muted-foreground" />}
-          endIcon={
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-8 w-8 md:hidden" 
-              onClick={() => setShowSearch(false)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          }
-        />
+        <div className="relative w-full">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search resumes, templates..." 
+            className="h-9 pl-10 pr-10"
+          />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 md:hidden" 
+            onClick={() => setShowSearch(false)}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
       
       <div className="flex items-center space-x-2">
@@ -178,7 +178,5 @@ const Header = ({ toggleSidebar, sidebarCollapsed }: HeaderProps) => {
     </header>
   );
 };
-
-import { LogOut, Settings, X } from 'lucide-react';
 
 export default Header;
