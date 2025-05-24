@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,6 +9,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ResumesPage from "./pages/ResumesPage";
 import ResumeViewPage from "./pages/ResumeViewPage";
 import CoverLettersPage from "./pages/CoverLettersPage";
+import CoverLetterViewPage from "./pages/CoverLetterViewPage";
 import ProfilePage from "./pages/ProfilePage";
 import ResumeBuilderPage from "./pages/ResumeBuilderPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -33,6 +33,7 @@ const App = () => (
           <Route path="/resumes" element={<ResumesPage />} />
           <Route path="/resume/:id" element={<ResumeViewPage />} />
           <Route path="/cover-letters" element={<CoverLettersPage />} />
+          <Route path="/cover-letter/:id/view" element={<CoverLetterViewPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/resume-builder/:id" element={<ResumeBuilderPage />} />
           <Route path="/resume-builder/new" element={<ResumeBuilderPage />} />
