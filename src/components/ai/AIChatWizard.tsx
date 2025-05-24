@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { SendHorizontal, User, Bot, Upload, Link, Clock, CheckCircle, PlusCircle, Play, FileText, Sparkles } from 'lucide-react';
+import { SendHorizontal, User, Bot, Upload, PlusCircle, Play, FileText, Sparkles, Brain } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Progress } from '@/components/ui/progress';
 
@@ -32,7 +32,7 @@ const AIChatWizard = () => {
     {
       id: '1',
       role: 'assistant',
-      content: "🤖 Привет! Я ваш AI-ассистент для создания профессионального резюме.\n\nЯ создам для вас идеальное резюме, пошагово собирая информацию о вашем опыте, навыках и достижениях.\n\n✨ Что я могу делать:\n• Анализировать прикрепленные документы\n• Обрабатывать ссылки на портфолио\n• Оптимизировать под ATS-системы\n• Создавать персонализированный контент\n\nГотовы начать? Нажмите кнопку ниже! 🚀",
+      content: "Привет! Я AI-ассистент для создания резюме.\n\nЯ помогу создать профессиональное резюме, которое выделит ваши сильные стороны и соответствует современным стандартам.\n\nМожу анализировать документы, оптимизировать под ATS-системы и создавать персонализированный контент.\n\nГотовы начать?",
       timestamp: new Date(),
     }
   ]);
@@ -49,46 +49,46 @@ const AIChatWizard = () => {
     {
       id: 'personal',
       title: 'Личная информация',
-      question: "Давайте начнем с основ! Расскажите мне:\n\n👤 Ваше полное имя\n📧 Email и телефон\n🌍 Город проживания\n💼 Желаемая должность/направление",
+      question: "Расскажите о себе:\n\n• Полное имя\n• Контактная информация\n• Город проживания\n• Желаемая должность",
       completed: false,
     },
     {
       id: 'summary',
       title: 'Профессиональное резюме',
-      question: "Отлично! Теперь о вашей экспертизе:\n\n🎯 Ваша специализация\n⭐ Ключевые достижения\n🏆 Уникальные навыки\n📈 Что делает вас особенным?",
+      question: "Опишите вашу экспертизу:\n\n• Специализация\n• Ключевые достижения\n• Уникальные навыки\n• Профессиональные цели",
       completed: false,
     },
     {
       id: 'experience',
       title: 'Опыт работы',
-      question: "Расскажите о своем профессиональном пути:\n\n🏢 Компании и должности\n📅 Даты работы\n🎯 Ключевые обязанности\n📊 Конкретные результаты и цифры",
+      question: "Расскажите о работе:\n\n• Компании и должности\n• Периоды работы\n• Основные обязанности\n• Достижения с цифрами",
       completed: false,
     },
     {
       id: 'education',
       title: 'Образование',
-      question: "Поделитесь информацией об образовании:\n\n🎓 Учебные заведения\n📚 Специальность/направление\n📅 Годы обучения\n🏅 Сертификаты и курсы",
+      question: "Образование и сертификаты:\n\n• Учебные заведения\n• Специальность\n• Годы обучения\n• Дополнительные курсы",
       completed: false,
     },
     {
       id: 'skills',
-      title: 'Навыки и компетенции',
-      question: "Последний штрих - ваши навыки:\n\n🛠️ Технические навыки\n💡 Soft skills\n🌐 Языки (уровень)\n⚡ Специальные инструменты",
+      title: 'Навыки',
+      question: "Ваши компетенции:\n\n• Технические навыки\n• Личные качества\n• Языки\n• Инструменты и технологии",
       completed: false,
     },
     {
       id: 'complete',
-      title: 'Генерация резюме',
-      question: "🎉 Превосходно! У меня есть вся информация.\n\nТеперь я создам ваше профессиональное резюме, оптимизированное для современных требований рынка труда.\n\nГотовы к магии? ✨",
+      title: 'Финализация',
+      question: "Отлично! Создаю ваше резюме.\n\nАнализирую информацию и оптимизирую под современные требования.\n\nГотово к генерации?",
       completed: false,
     }
   ];
 
   const suggestions = [
-    "Анна Петрова, frontend-разработчик из Москвы",
-    "5 лет в разработке React приложений",
-    "Ведущий разработчик в Яндексе 2020-2023",
-    "Владею TypeScript, Node.js, знаю английский B2"
+    "Анна Петрова, frontend-разработчик",
+    "5 лет опыта в React",
+    "Увеличил конверсию на 25%",
+    "Владею английским B2"
   ];
 
   useEffect(() => {
@@ -152,11 +152,11 @@ const AIChatWizard = () => {
       }, 1200);
     } else {
       setTimeout(() => {
-        simulateAIResponse("🎊 Ваше резюме готово!\n\nЯ создал профессиональное резюме, оптимизированное под современные стандарты. Резюме учитывает:\n\n✅ ATS-совместимость\n✅ Современный дизайн\n✅ Ключевые слова отрасли\n✅ Структуру достижений\n\nПереходите в редактор для финальной настройки!", 2000);
+        simulateAIResponse("✨ Резюме готово!\n\nСоздано профессиональное резюме с учетом:\n• ATS-оптимизации\n• Современного дизайна\n• Ключевых слов отрасли\n• Структуры достижений\n\nПереходите к просмотру!");
         
         toast({
-          title: "🎉 Резюме создано!",
-          description: "Ваше AI-резюме готово к просмотру и редактированию.",
+          title: "Резюме создано",
+          description: "Ваше AI-резюме готово к просмотру.",
         });
         
         setTimeout(() => {
@@ -182,7 +182,7 @@ const AIChatWizard = () => {
     const fileMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: `📎 Прикрепил файл: ${file.name}`,
+      content: `📎 ${file.name}`,
       timestamp: new Date(),
       attachments: [{ type: 'file', name: file.name }]
     };
@@ -191,7 +191,7 @@ const AIChatWizard = () => {
     setIsGenerating(true);
 
     setTimeout(() => {
-      simulateAIResponse(`✅ Отлично! Анализирую файл "${file.name}"...\n\nИзвлек полезную информацию для резюме. Продолжим сбор данных!`);
+      simulateAIResponse(`Файл "${file.name}" обработан.\n\nИзвлечена полезная информация для резюме.`);
     }, 1800);
   };
 
@@ -201,46 +201,49 @@ const AIChatWizard = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl">
-        <Card className="border-0 bg-slate-900/90 backdrop-blur-xl shadow-2xl">
-          <CardHeader className="border-b border-slate-700/50 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-4xl mx-auto">
+        <Card className="border-0 shadow-none bg-transparent">
+          {/* Header */}
+          <CardHeader className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500">
-                  <Bot className="h-6 w-6 text-white" />
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                  <Brain className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-white">AI Resume Creator</h1>
-                  <p className="text-sm text-slate-400">Создание резюме с искусственным интеллектом</p>
+                  <h1 className="text-2xl font-semibold text-gray-900">AI Resume Creator</h1>
+                  <p className="text-sm text-gray-500">Создание резюме с искусственным интеллектом</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 {wizardStarted && (
-                  <div className="text-xs text-slate-400 bg-slate-800/50 px-3 py-1 rounded-full border border-slate-700">
-                    Шаг {currentStep + 1}/{wizardSteps.length}
+                  <div className="text-xs text-gray-400 bg-gray-50 px-3 py-1.5 rounded-full">
+                    {currentStep + 1}/{wizardSteps.length}
                   </div>
                 )}
-                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                <div className="w-2 h-2 rounded-full bg-green-400"></div>
               </div>
             </div>
+            
             {wizardStarted && (
-              <div className="mt-4">
-                <div className="flex justify-between text-xs text-slate-400 mb-2">
+              <div className="mt-6">
+                <div className="flex justify-between text-xs text-gray-500 mb-2">
                   <span>{wizardSteps[currentStep]?.title}</span>
                   <span>{Math.round(progressValue)}%</span>
                 </div>
-                <Progress value={progressValue} className="h-1 bg-slate-800">
+                <div className="w-full bg-gray-100 rounded-full h-1">
                   <div 
-                    className="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500 ease-out rounded-full"
+                    className="h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500"
                     style={{ width: `${progressValue}%` }}
                   />
-                </Progress>
+                </div>
               </div>
             )}
           </CardHeader>
           
-          <ScrollArea className="h-96 p-6">
+          {/* Messages */}
+          <ScrollArea className="h-[500px] p-6">
             <div className="space-y-6">
               {messages.map((message) => (
                 <div 
@@ -249,28 +252,28 @@ const AIChatWizard = () => {
                 >
                   <div 
                     className={`
-                      max-w-[80%] rounded-2xl px-4 py-3 backdrop-blur-sm
+                      max-w-[75%] rounded-2xl px-4 py-3
                       ${message.role === 'user' 
-                        ? 'bg-gradient-to-br from-purple-600 to-blue-600 text-white ml-4' 
-                        : 'bg-slate-800/80 text-slate-100 border border-slate-700/50 mr-4'
+                        ? 'bg-blue-500 text-white' 
+                        : 'bg-gray-50 text-gray-900 border border-gray-100'
                       }
                     `}
                   >
-                    <div className="flex items-center mb-2">
+                    <div className="flex items-center mb-1">
                       {message.role === 'user' ? (
-                        <User className="h-4 w-4 mr-2" />
+                        <User className="h-3 w-3 mr-2 opacity-70" />
                       ) : (
-                        <Bot className="h-4 w-4 mr-2 text-purple-400" />
+                        <Bot className="h-3 w-3 mr-2 text-blue-500" />
                       )}
-                      <span className="text-xs font-medium opacity-80">
-                        {message.role === 'user' ? 'Вы' : 'AI Assistant'}
+                      <span className="text-xs font-medium opacity-70">
+                        {message.role === 'user' ? 'Вы' : 'AI'}
                       </span>
                     </div>
                     
                     <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
                     
                     {message.attachments?.length > 0 && (
-                      <div className="mt-3 p-2 rounded-lg bg-black/20 border border-slate-600/30">
+                      <div className="mt-2 p-2 rounded-lg bg-white/10">
                         {message.attachments.map((attachment, i) => (
                           <div key={i} className="flex items-center text-xs">
                             <FileText className="h-3 w-3 mr-2" />
@@ -288,28 +291,28 @@ const AIChatWizard = () => {
               ))}
               
               {!wizardStarted && (
-                <div className="flex justify-center mt-8">
+                <div className="flex justify-center mt-12">
                   <Button 
                     onClick={handleStartWizard}
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-2xl shadow-xl transform transition-all duration-200 hover:scale-105"
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200"
                     size="lg"
                   >
-                    <Play className="h-5 w-5 mr-3" />
+                    <Play className="h-4 w-4 mr-2" />
                     Начать создание резюме
-                    <Sparkles className="h-5 w-5 ml-3" />
+                    <Sparkles className="h-4 w-4 ml-2" />
                   </Button>
                 </div>
               )}
               
               {isGenerating && (
                 <div className="flex justify-start">
-                  <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-slate-800/80 border border-slate-700/50 mr-4">
-                    <div className="flex items-center gap-1">
-                      <Bot className="h-4 w-4 mr-2 text-purple-400" />
+                  <div className="max-w-[75%] rounded-2xl px-4 py-3 bg-gray-50 border border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Bot className="h-3 w-3 text-blue-500" />
                       <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
                       </div>
                     </div>
                   </div>
@@ -320,9 +323,10 @@ const AIChatWizard = () => {
             </div>
           </ScrollArea>
           
+          {/* Suggestions */}
           {showSuggestions && wizardStarted && (
-            <div className="px-6 py-3 border-t border-slate-700/50 bg-slate-800/30">
-              <p className="text-xs font-medium text-slate-400 mb-3">💡 Примеры ответов:</p>
+            <div className="px-6 py-3 border-t border-gray-100 bg-gray-50/50">
+              <p className="text-xs font-medium text-gray-500 mb-3">Примеры ответов:</p>
               <div className="flex flex-wrap gap-2">
                 {suggestions.map((suggestion, index) => (
                   <Button 
@@ -330,17 +334,18 @@ const AIChatWizard = () => {
                     variant="outline" 
                     size="sm"
                     onClick={() => handleUseSuggestion(suggestion)}
-                    className="text-xs bg-slate-800/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:border-slate-500"
+                    className="text-xs bg-white border-gray-200 text-gray-600 hover:bg-gray-50 rounded-full"
                   >
-                    {suggestion.length > 40 ? `${suggestion.substring(0, 40)}...` : suggestion}
+                    {suggestion}
                   </Button>
                 ))}
               </div>
             </div>
           )}
           
+          {/* Input */}
           {wizardStarted && (
-            <CardFooter className="border-t border-slate-700/50 bg-slate-800/20 p-6">
+            <CardFooter className="border-t border-gray-100 bg-white p-6">
               <form 
                 className="flex w-full items-end space-x-3"
                 onSubmit={(e) => {
@@ -365,7 +370,7 @@ const AIChatWizard = () => {
                         variant="outline"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isGenerating}
-                        className="bg-slate-800/50 border-slate-600 hover:bg-slate-700 text-slate-300"
+                        className="border-gray-200 hover:bg-gray-50 rounded-xl"
                       >
                         <Upload className="h-4 w-4" />
                       </Button>
@@ -376,8 +381,8 @@ const AIChatWizard = () => {
                 
                 <div className="flex-1 relative">
                   <Textarea 
-                    placeholder="Введите ваш ответ..."
-                    className="bg-slate-800/50 border-slate-600 text-slate-100 placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 resize-none"
+                    placeholder="Ваш ответ..."
+                    className="border-gray-200 focus:border-blue-300 focus:ring-blue-200 resize-none rounded-xl bg-gray-50 focus:bg-white transition-colors"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -395,7 +400,7 @@ const AIChatWizard = () => {
                         variant="ghost"
                         onClick={() => setShowSuggestions(!showSuggestions)}
                         disabled={isGenerating}
-                        className="text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                        className="text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl"
                       >
                         <PlusCircle className="h-4 w-4" />
                       </Button>
@@ -408,7 +413,7 @@ const AIChatWizard = () => {
                   type="submit" 
                   size="icon"
                   disabled={isGenerating || !input.trim()}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+                  className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl"
                 >
                   <SendHorizontal className="h-4 w-4" />
                 </Button>
