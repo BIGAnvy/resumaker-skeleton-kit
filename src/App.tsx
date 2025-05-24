@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DashboardPage from "./pages/DashboardPage";
 import ResumesPage from "./pages/ResumesPage";
+import ResumeViewPage from "./pages/ResumeViewPage";
 import CoverLettersPage from "./pages/CoverLettersPage";
 import ProfilePage from "./pages/ProfilePage";
 import ResumeBuilderPage from "./pages/ResumeBuilderPage";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/resumes" element={<ResumesPage />} />
+          <Route path="/resume/:id" element={<ResumeViewPage />} />
           <Route path="/cover-letters" element={<CoverLettersPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/resume-builder/:id" element={<ResumeBuilderPage />} />

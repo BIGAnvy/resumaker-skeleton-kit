@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -88,7 +87,7 @@ const Dashboard = () => {
         <TabsContent value="resumes" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {documents.filter(doc => doc.type === "resume").map((doc) => (
-              <Card key={doc.id}>
+              <Card key={doc.id} className="cursor-pointer" onClick={() => navigate(`/resume/${doc.id}`)}>
                 <CardHeader className="pb-2">
                   <CardTitle>{doc.title}</CardTitle>
                   <CardDescription>Last modified: {doc.lastModified}</CardDescription>
@@ -97,18 +96,30 @@ const Dashboard = () => {
                   Resume Preview
                 </CardContent>
                 <CardFooter className="flex justify-between pt-4">
-                  <Button variant="outline" size="sm" onClick={() => navigate(`/resume-builder/${doc.id}`)}>
+                  <Button variant="outline" size="sm" onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/resume-builder/${doc.id}`);
+                  }}>
                     <Edit className="h-4 w-4 mr-2" />
                     Edit
                   </Button>
                   <div className="flex space-x-1">
-                    <Button variant="ghost" size="icon" onClick={() => handleCopy(doc)}>
+                    <Button variant="ghost" size="icon" onClick={(e) => {
+                      e.stopPropagation();
+                      handleCopy(doc);
+                    }}>
                       <Copy className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDownload(doc)}>
+                    <Button variant="ghost" size="icon" onClick={(e) => {
+                      e.stopPropagation();
+                      handleDownload(doc);
+                    }}>
                       <Download className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(doc.id)}>
+                    <Button variant="ghost" size="icon" className="text-destructive" onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(doc.id);
+                    }}>
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>
