@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,11 +13,13 @@ import {
   Sparkles, 
   Settings,
   Share2,
-  AlertTriangle
+  AlertTriangle,
+  Bot
 } from 'lucide-react';
 import ResumeSection from './ResumeSection';
 import ResumePreview from './ResumePreview';
 import LanguageSelector from './LanguageSelector';
+import AIChatWizard from '../ai/AIChatWizard';
 import { useNavigate } from 'react-router-dom';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import VersionHistory from '../version/VersionHistory';
@@ -88,6 +89,7 @@ const ResumeBuilder = () => {
   const [error, setError] = useState<Error | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showExportDialog, setShowExportDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState('editor');
 
   const handleAddSection = (type: SectionType['type']) => {
     const newSection: SectionType = {
@@ -262,9 +264,13 @@ const ResumeBuilder = () => {
       
       <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-12rem)]">
         <div className="w-full lg:w-1/2 flex flex-col">
-          <Tabs defaultValue="editor">
-            <TabsList className="w-full grid grid-cols-2">
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="w-full grid grid-cols-3">
               <TabsTrigger value="editor">Editor</TabsTrigger>
+              <TabsTrigger value="ai-assistant">
+                <Bot className="h-4 w-4 mr-2" />
+                AI Assistant
+              </TabsTrigger>
               <TabsTrigger value="templates">Templates</TabsTrigger>
             </TabsList>
             
@@ -358,7 +364,6 @@ const ResumeBuilder = () => {
                         <TagInput
                           tags={['JavaScript', 'React', 'TypeScript']}
                           onChange={(tags) => {
-                            // In a real app, we'd update the skills section with these tags
                             console.log('Skills updated:', tags);
                           }}
                           suggestions={skillsSuggestions}
@@ -385,6 +390,14 @@ const ResumeBuilder = () => {
                   </div>
                 </ScrollArea>
               )}
+            </TabsContent>
+
+            <TabsContent value="ai-assistant" className="flex-1 h-[calc(100vh-14rem)]">
+              <Card className="h-full">
+                <CardContent className="p-0 h-full">
+                  <AIChatWizard />
+                </CardContent>
+              </Card>
             </TabsContent>
             
             <TabsContent value="templates" className="h-[calc(100vh-14rem)]">
