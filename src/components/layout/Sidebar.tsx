@@ -1,7 +1,7 @@
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { HomeIcon, User, FileText, Mail, Settings } from 'lucide-react';
+import { HomeIcon, User, FileText, Mail, Settings, Bot } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 type SidebarProps = {
@@ -63,6 +63,13 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
             label="Resumes" 
             href="/resumes" 
             active={isActive("/resumes")} 
+            collapsed={collapsed} 
+          />
+          <NavItem 
+            icon={Bot} 
+            label="AI Resume" 
+            href="/ai-resume" 
+            active={isActive("/ai-resume")} 
             collapsed={collapsed} 
           />
           <NavItem 

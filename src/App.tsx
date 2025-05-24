@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +18,7 @@ import CoverLetterEditorPage from "./pages/CoverLetterEditorPage";
 import TemplateGalleryPage from "./pages/TemplateGalleryPage";
 import LocalizationSettingsPage from "./pages/LocalizationSettingsPage";
 import AIChatWizardPage from "./pages/AIChatWizardPage";
+import AIResumeWizardPage from "./pages/AIResumeWizardPage";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 
 const queryClient = new QueryClient();
@@ -44,6 +46,7 @@ const App = () => (
           <Route path="/settings/profile" element={<ProfileSettingsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/ai-wizard" element={<AIChatWizardPage />} />
+          <Route path="/ai-resume" element={<AIResumeWizardPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
