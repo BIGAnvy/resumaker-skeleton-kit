@@ -1,16 +1,8 @@
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import LandingPage from '../components/landing/LandingPage';
 
 const Index = () => {
-  const navigate = useNavigate();
-  
-  // Redirect to dashboard on home page visit
-  useEffect(() => {
-    navigate('/dashboard');
-  }, [navigate]);
-  
-  return null;
+  return <LandingPage />;
 };
 
 export default Index;

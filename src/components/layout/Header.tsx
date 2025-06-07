@@ -1,7 +1,6 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, Bell, User, Search, HelpCircle, X, LogOut, Settings } from 'lucide-react';
+import { Menu, Bell, User, Search, HelpCircle, X, LogOut, Settings, Home } from 'lucide-react';
 import ThemeToggle from '../theme/ThemeToggle';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
@@ -39,8 +38,17 @@ const Header = ({ toggleSidebar, sidebarCollapsed }: HeaderProps) => {
           <span className="sr-only">{sidebarCollapsed ? 'Show' : 'Hide'} sidebar</span>
         </Button>
         
-        <div className="hidden md:flex">
+        <div className="hidden md:flex items-center space-x-4">
           <img src="/logo.svg" alt="Resumaker" className="h-8" />
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate('/')}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <Home className="h-4 w-4 mr-2" />
+            На главную
+          </Button>
         </div>
       </div>
       
