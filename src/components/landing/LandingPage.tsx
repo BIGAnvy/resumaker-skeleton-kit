@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowRight, CheckCircle, Star, Users, FileText, Zap, Shield, Globe, Sparkles, Brain, Target } from 'lucide-react';
@@ -94,86 +93,99 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Enhanced animated background with interactive geometric patterns */}
-      <div className="fixed inset-0 bg-black">
-        {/* Dynamic floating orbs */}
+      {/* Enhanced dynamic background with interactive elements */}
+      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-950 to-black">
+        {/* Animated mesh gradient background */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-resumaker-600/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-3/4 right-1/4 w-80 h-80 bg-resumaker-400/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-          <div className="absolute top-1/2 left-3/4 w-64 h-64 bg-resumaker-500/8 rounded-full blur-3xl animate-pulse" style={{animationDelay: '4s'}}></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-cyan-900/20 opacity-40 animate-pulse"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-600/30 to-purple-600/30 rounded-full blur-3xl animate-[pulse_4s_ease-in-out_infinite]"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-cyan-600/25 to-blue-600/25 rounded-full blur-3xl animate-[pulse_6s_ease-in-out_infinite] animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-3/4 w-64 h-64 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-full blur-3xl animate-[pulse_5s_ease-in-out_infinite] animation-delay-4000"></div>
         </div>
         
-        {/* Interactive geometric grid */}
-        <div className="absolute inset-0 overflow-hidden opacity-20">
+        {/* Enhanced geometric grid with animations */}
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <svg className="w-full h-full" style={{ filter: 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.3))' }}>
+            <defs>
+              <linearGradient id="hexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.6"/>
+                <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.4"/>
+                <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.6"/>
+              </linearGradient>
+              
+              <linearGradient id="triangleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.5"/>
+                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.3"/>
+              </linearGradient>
+              
+              <pattern id="hexPattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <polygon points="40,10 65,25 65,55 40,70 15,55 15,25" fill="none" stroke="url(#hexGradient)" strokeWidth="1.5" opacity="0.7">
+                  <animateTransform attributeName="transform" type="rotate" values="0 40 40;360 40 40" dur="25s" repeatCount="indefinite"/>
+                  <animate attributeName="stroke-opacity" values="0.3;0.8;0.3" dur="4s" repeatCount="indefinite"/>
+                </polygon>
+                <circle cx="40" cy="40" r="3" fill="url(#hexGradient)" opacity="0.6">
+                  <animate attributeName="r" values="2;5;2" dur="3s" repeatCount="indefinite"/>
+                </circle>
+              </pattern>
+              
+              <pattern id="trianglePattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+                <polygon points="30,10 50,40 10,40" fill="none" stroke="url(#triangleGradient)" strokeWidth="1" opacity="0.5">
+                  <animateTransform attributeName="transform" type="scale" values="0.8;1.3;0.8" dur="8s" repeatCount="indefinite"/>
+                  <animate attributeName="stroke-opacity" values="0.2;0.7;0.2" dur="6s" repeatCount="indefinite"/>
+                </polygon>
+              </pattern>
+            </defs>
+            
+            <rect width="100%" height="100%" fill="url(#hexPattern)"/>
+            <rect width="100%" height="100%" fill="url(#trianglePattern)" opacity="0.6"/>
+          </svg>
+        </div>
+
+        {/* Interactive floating particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/5 left-1/5 w-2 h-2 bg-blue-400 rounded-full opacity-60 animate-[ping_3s_infinite]"></div>
+          <div className="absolute top-3/5 left-4/5 w-3 h-3 bg-purple-400 rounded-full opacity-50 animate-[ping_4s_infinite] animation-delay-1000"></div>
+          <div className="absolute top-4/5 left-2/5 w-2 h-2 bg-cyan-400 rounded-full opacity-70 animate-[ping_5s_infinite] animation-delay-2000"></div>
+          <div className="absolute top-2/5 left-3/5 w-1 h-1 bg-pink-400 rounded-full opacity-60 animate-[ping_3.5s_infinite] animation-delay-3000"></div>
+        </div>
+
+        {/* Dynamic connecting lines */}
+        <div className="absolute inset-0 overflow-hidden opacity-25">
           <svg className="w-full h-full">
             <defs>
-              <pattern id="hexPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-                <polygon points="30,5 50,17 50,39 30,51 10,39 10,17" fill="none" stroke="url(#hexGrad)" strokeWidth="0.5" opacity="0.6">
-                  <animateTransform attributeName="transform" type="rotate" values="0 30 28;360 30 28" dur="20s" repeatCount="indefinite"/>
-                </polygon>
-              </pattern>
-              <pattern id="trianglePattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <polygon points="20,5 35,30 5,30" fill="none" stroke="url(#triGrad)" strokeWidth="0.3" opacity="0.4">
-                  <animateTransform attributeName="transform" type="scale" values="1;1.2;1" dur="15s" repeatCount="indefinite"/>
-                </polygon>
-              </pattern>
-              <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0670e2" stopOpacity="0.3"/>
-                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.1"/>
-              </linearGradient>
-              <linearGradient id="triGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.2"/>
-                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.05"/>
+              <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8"/>
+                <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.4"/>
+                <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.8"/>
               </linearGradient>
             </defs>
-            <rect width="100%" height="100%" fill="url(#hexPattern)"/>
-            <rect width="100%" height="100%" fill="url(#trianglePattern)" opacity="0.5"/>
+            
+            <line x1="10%" y1="20%" x2="90%" y2="30%" stroke="url(#lineGrad)" strokeWidth="1" opacity="0.6">
+              <animate attributeName="stroke-opacity" values="0.2;0.8;0.2" dur="8s" repeatCount="indefinite"/>
+              <animateTransform attributeName="transform" type="rotate" values="0 50 25;5 50 25;0 50 25" dur="12s" repeatCount="indefinite"/>
+            </line>
+            
+            <line x1="20%" y1="80%" x2="80%" y2="70%" stroke="url(#lineGrad)" strokeWidth="1" opacity="0.5">
+              <animate attributeName="stroke-opacity" values="0.1;0.7;0.1" dur="10s" repeatCount="indefinite"/>
+              <animateTransform attributeName="transform" type="rotate" values="0 50 75;-3 50 75;0 50 75" dur="15s" repeatCount="indefinite"/>
+            </line>
+            
+            <line x1="70%" y1="20%" x2="30%" y2="80%" stroke="url(#lineGrad)" strokeWidth="0.8" opacity="0.4">
+              <animate attributeName="stroke-opacity" values="0.1;0.6;0.1" dur="7s" repeatCount="indefinite"/>
+            </line>
           </svg>
         </div>
 
-        {/* Animated neural network connections */}
-        <div className="absolute inset-0 overflow-hidden">
-          <svg className="w-full h-full opacity-10">
-            <g>
-              <circle cx="20%" cy="20%" r="2" fill="#0670e2">
-                <animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="80%" cy="30%" r="2" fill="#0284c7">
-                <animate attributeName="r" values="2;3;2" dur="4s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="60%" cy="70%" r="2" fill="#0ea5e9">
-                <animate attributeName="r" values="2;5;2" dur="5s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="30%" cy="80%" r="2" fill="#0670e2">
-                <animate attributeName="r" values="2;3;2" dur="3.5s" repeatCount="indefinite"/>
-              </circle>
-              
-              <line x1="20%" y1="20%" x2="80%" y2="30%" stroke="#0670e2" strokeWidth="0.5" opacity="0.3">
-                <animate attributeName="stroke-opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite"/>
-              </line>
-              <line x1="80%" y1="30%" x2="60%" y2="70%" stroke="#0284c7" strokeWidth="0.5" opacity="0.3">
-                <animate attributeName="stroke-opacity" values="0.1;0.4;0.1" dur="7s" repeatCount="indefinite"/>
-              </line>
-              <line x1="60%" y1="70%" x2="30%" y2="80%" stroke="#0ea5e9" strokeWidth="0.5" opacity="0.3">
-                <animate attributeName="stroke-opacity" values="0.1;0.6;0.1" dur="5s" repeatCount="indefinite"/>
-              </line>
-              <line x1="30%" y1="80%" x2="20%" y2="20%" stroke="#0670e2" strokeWidth="0.5" opacity="0.3">
-                <animate attributeName="stroke-opacity" values="0.1;0.3;0.1" dur="8s" repeatCount="indefinite"/>
-              </line>
-            </g>
-          </svg>
-        </div>
-
-        {/* Moving gradient lines with better performance */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-1/2 -left-1/2 w-full h-full border border-resumaker-800/20 rounded-full animate-[spin_30s_linear_infinite]"></div>
-          <div className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 border border-resumaker-700/15 rounded-full animate-[spin_40s_linear_infinite_reverse]"></div>
-          <div className="absolute top-0 left-0 w-1/2 h-1/2 border border-resumaker-600/10 rounded-full animate-[spin_50s_linear_infinite]"></div>
+        {/* Rotating geometric rings */}
+        <div className="absolute inset-0 overflow-hidden opacity-20">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-blue-500/30 rounded-full animate-[spin_60s_linear_infinite]"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-purple-500/25 rounded-full animate-[spin_45s_linear_infinite_reverse]"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-cyan-500/20 rounded-full animate-[spin_30s_linear_infinite]"></div>
         </div>
       </div>
 
       {/* Header */}
-      <header className="relative z-50 border-b border-white/5 backdrop-blur-xl bg-black/60">
+      <header className="relative z-50 border-b border-white/10 backdrop-blur-xl bg-black/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
@@ -193,7 +205,7 @@ const LandingPage = () => {
             <Button 
               variant="outline" 
               onClick={() => navigate('/dashboard')}
-              className="hidden md:flex border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm font-medium"
+              className="hidden md:flex border-white/40 text-gray-100 bg-white/10 hover:bg-white hover:text-black hover:border-white transition-all duration-300 backdrop-blur-sm font-medium"
             >
               Войти в приложение
             </Button>
@@ -204,9 +216,9 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="relative py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/20 backdrop-blur-sm mb-8">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/30 backdrop-blur-sm mb-8">
             <Sparkles className="w-4 h-4 text-resumaker-400 mr-2" />
-            <span className="text-sm text-gray-300">Powered by Advanced AI</span>
+            <span className="text-sm text-gray-200">Powered by Advanced AI</span>
           </div>
           
           <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight">
@@ -219,7 +231,7 @@ const LandingPage = () => {
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
             Революционный AI-конструктор резюме. Создавайте профессиональные резюме за минуты, 
             получайте больше собеседований и находите работу мечты.
           </p>
@@ -236,7 +248,7 @@ const LandingPage = () => {
             <Button 
               variant="outline" 
               size="lg" 
-              className="border-white/30 text-gray-900 bg-white/10 hover:bg-white hover:text-black backdrop-blur-sm px-8 py-4 text-lg font-medium transition-all duration-300"
+              className="border-white/40 text-gray-900 bg-white/15 hover:bg-white hover:text-black hover:border-white backdrop-blur-sm px-8 py-4 text-lg font-medium transition-all duration-300"
             >
               Посмотреть примеры
             </Button>
