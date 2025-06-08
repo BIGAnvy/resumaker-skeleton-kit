@@ -94,18 +94,45 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Animated background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-resumaker-600 opacity-20 blur-[100px]"></div>
+      {/* Enhanced animated background */}
+      <div className="fixed inset-0 bg-black">
+        {/* Floating orbs background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-resumaker-600/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-3/4 right-1/4 w-80 h-80 bg-resumaker-400/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/2 left-3/4 w-64 h-64 bg-resumaker-500/8 rounded-full blur-3xl animate-pulse" style={{animationDelay: '4s'}}></div>
+        </div>
+        
+        {/* Subtle noise texture */}
+        <div className="absolute inset-0 opacity-30">
+          <svg className="w-full h-full">
+            <defs>
+              <filter id="noiseFilter">
+                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" result="noise" seed="1"/>
+                <feColorMatrix in="noise" type="saturate" values="0"/>
+                <feComponentTransfer>
+                  <feFuncA type="discrete" tableValues="0.1 0.15 0.1 0.05"/>
+                </feComponentTransfer>
+              </filter>
+            </defs>
+            <rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.4"/>
+          </svg>
+        </div>
+
+        {/* Moving gradient lines */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-1/2 -left-1/2 w-full h-full border border-resumaker-800/20 rounded-full animate-[spin_30s_linear_infinite]"></div>
+          <div className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 border border-resumaker-700/15 rounded-full animate-[spin_40s_linear_infinite_reverse]"></div>
+          <div className="absolute top-0 left-0 w-1/2 h-1/2 border border-resumaker-600/10 rounded-full animate-[spin_50s_linear_infinite]"></div>
+        </div>
       </div>
 
       {/* Header */}
-      <header className="relative z-50 border-b border-white/10 backdrop-blur-md bg-black/50">
+      <header className="relative z-50 border-b border-white/5 backdrop-blur-xl bg-black/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-resumaker-500 to-resumaker-700 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-resumaker-500 to-resumaker-700 rounded-lg flex items-center justify-center shadow-lg shadow-resumaker-500/25">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -121,7 +148,7 @@ const LandingPage = () => {
             <Button 
               variant="outline" 
               onClick={() => navigate('/dashboard')}
-              className="hidden md:flex border-white/20 text-white hover:bg-white/10 backdrop-blur-sm"
+              className="hidden md:flex border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm font-medium"
             >
               Войти в приложение
             </Button>
@@ -132,7 +159,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="relative py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/20 backdrop-blur-sm mb-8">
             <Sparkles className="w-4 h-4 text-resumaker-400 mr-2" />
             <span className="text-sm text-gray-300">Powered by Advanced AI</span>
           </div>
@@ -156,7 +183,7 @@ const LandingPage = () => {
             <Button 
               size="lg" 
               onClick={() => navigate('/dashboard')}
-              className="bg-gradient-to-r from-resumaker-500 to-resumaker-700 hover:from-resumaker-600 hover:to-resumaker-800 text-white px-8 py-4 text-lg font-semibold shadow-[0_0_30px_rgba(6,112,226,0.3)] hover:shadow-[0_0_40px_rgba(6,112,226,0.5)] transition-all duration-300"
+              className="bg-gradient-to-r from-resumaker-500 to-resumaker-700 hover:from-resumaker-600 hover:to-resumaker-800 text-white px-8 py-4 text-lg font-semibold shadow-[0_0_30px_rgba(6,112,226,0.4)] hover:shadow-[0_0_50px_rgba(6,112,226,0.6)] transition-all duration-300 border-0"
             >
               Создать резюме бесплатно
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -164,13 +191,13 @@ const LandingPage = () => {
             <Button 
               variant="outline" 
               size="lg" 
-              className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 text-lg"
+              className="border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm px-8 py-4 text-lg font-medium"
             >
               Посмотреть примеры
             </Button>
           </div>
           
-          <div className="flex justify-center items-center space-x-12 text-gray-500">
+          <div className="flex justify-center items-center space-x-12 text-gray-400">
             <div className="flex items-center space-x-3">
               <Users className="h-5 w-5" />
               <span className="text-lg">50,000+ пользователей</span>
@@ -187,7 +214,7 @@ const LandingPage = () => {
       <section id="features" className="relative py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-6">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/20 backdrop-blur-sm mb-6">
               <Target className="w-4 h-4 text-resumaker-400 mr-2" />
               <span className="text-sm text-gray-300">Мощные возможности</span>
             </div>
@@ -207,7 +234,7 @@ const LandingPage = () => {
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-resumaker-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-resumaker-500 to-resumaker-700 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-resumaker-500 to-resumaker-700 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-resumaker-500/25">
                     <feature.icon className="h-7 w-7 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-4">{feature.title}</h3>
@@ -289,13 +316,13 @@ const LandingPage = () => {
                 key={index} 
                 className={`relative p-8 rounded-2xl backdrop-blur-sm transition-all duration-500 hover:translate-y-[-4px] ${
                   plan.popular 
-                    ? 'bg-gradient-to-br from-resumaker-500/20 to-resumaker-700/20 border-2 border-resumaker-500' 
+                    ? 'bg-gradient-to-br from-resumaker-500/20 to-resumaker-700/20 border-2 border-resumaker-500 shadow-xl shadow-resumaker-500/20' 
                     : 'bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 hover:border-resumaker-500/50'
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-resumaker-500 to-resumaker-700 text-white text-sm font-bold px-6 py-2 rounded-full">
+                    <div className="bg-gradient-to-r from-resumaker-500 to-resumaker-700 text-white text-sm font-bold px-6 py-2 rounded-full shadow-lg">
                       Популярный
                     </div>
                   </div>
@@ -314,12 +341,11 @@ const LandingPage = () => {
                   ))}
                 </ul>
                 <Button 
-                  className={`w-full py-3 font-semibold transition-all duration-300 ${
+                  className={`w-full py-3 font-semibold transition-all duration-300 border-0 ${
                     plan.popular 
-                      ? 'bg-gradient-to-r from-resumaker-500 to-resumaker-700 hover:from-resumaker-600 hover:to-resumaker-800 text-white shadow-[0_0_30px_rgba(6,112,226,0.3)]' 
-                      : 'border-white/20 text-white hover:bg-white/10 backdrop-blur-sm'
+                      ? 'bg-gradient-to-r from-resumaker-500 to-resumaker-700 hover:from-resumaker-600 hover:to-resumaker-800 text-white shadow-[0_0_30px_rgba(6,112,226,0.4)] hover:shadow-[0_0_40px_rgba(6,112,226,0.6)]' 
+                      : 'bg-white/10 text-white hover:bg-white hover:text-black backdrop-blur-sm'
                   }`}
-                  variant={plan.popular ? 'default' : 'outline'}
                   onClick={() => navigate('/dashboard')}
                 >
                   {plan.name === 'Free' ? 'Начать бесплатно' : 'Выбрать план'}
@@ -343,7 +369,7 @@ const LandingPage = () => {
             <Button 
               size="lg" 
               onClick={() => navigate('/dashboard')}
-              className="bg-gradient-to-r from-resumaker-500 to-resumaker-700 hover:from-resumaker-600 hover:to-resumaker-800 text-white px-12 py-4 text-lg font-semibold shadow-[0_0_30px_rgba(6,112,226,0.3)] hover:shadow-[0_0_40px_rgba(6,112,226,0.5)] transition-all duration-300"
+              className="bg-gradient-to-r from-resumaker-500 to-resumaker-700 hover:from-resumaker-600 hover:to-resumaker-800 text-white px-12 py-4 text-lg font-semibold shadow-[0_0_30px_rgba(6,112,226,0.4)] hover:shadow-[0_0_50px_rgba(6,112,226,0.6)] transition-all duration-300 border-0"
             >
               Создать резюме прямо сейчас
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -354,12 +380,12 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="relative border-t border-white/10 bg-black/50 backdrop-blur-md">
+      <footer className="relative border-t border-white/10 bg-black/60 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-resumaker-500 to-resumaker-700 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-br from-resumaker-500 to-resumaker-700 rounded-lg flex items-center justify-center shadow-lg shadow-resumaker-500/25">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
