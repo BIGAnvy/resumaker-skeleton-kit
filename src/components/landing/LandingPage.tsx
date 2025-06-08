@@ -94,32 +94,77 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Enhanced animated background */}
+      {/* Enhanced animated background with interactive geometric patterns */}
       <div className="fixed inset-0 bg-black">
-        {/* Floating orbs background */}
+        {/* Dynamic floating orbs */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-resumaker-600/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute top-3/4 right-1/4 w-80 h-80 bg-resumaker-400/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
           <div className="absolute top-1/2 left-3/4 w-64 h-64 bg-resumaker-500/8 rounded-full blur-3xl animate-pulse" style={{animationDelay: '4s'}}></div>
         </div>
         
-        {/* Subtle noise texture */}
-        <div className="absolute inset-0 opacity-30">
+        {/* Interactive geometric grid */}
+        <div className="absolute inset-0 overflow-hidden opacity-20">
           <svg className="w-full h-full">
             <defs>
-              <filter id="noiseFilter">
-                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" result="noise" seed="1"/>
-                <feColorMatrix in="noise" type="saturate" values="0"/>
-                <feComponentTransfer>
-                  <feFuncA type="discrete" tableValues="0.1 0.15 0.1 0.05"/>
-                </feComponentTransfer>
-              </filter>
+              <pattern id="hexPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+                <polygon points="30,5 50,17 50,39 30,51 10,39 10,17" fill="none" stroke="url(#hexGrad)" strokeWidth="0.5" opacity="0.6">
+                  <animateTransform attributeName="transform" type="rotate" values="0 30 28;360 30 28" dur="20s" repeatCount="indefinite"/>
+                </polygon>
+              </pattern>
+              <pattern id="trianglePattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                <polygon points="20,5 35,30 5,30" fill="none" stroke="url(#triGrad)" strokeWidth="0.3" opacity="0.4">
+                  <animateTransform attributeName="transform" type="scale" values="1;1.2;1" dur="15s" repeatCount="indefinite"/>
+                </polygon>
+              </pattern>
+              <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0670e2" stopOpacity="0.3"/>
+                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.1"/>
+              </linearGradient>
+              <linearGradient id="triGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.2"/>
+                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.05"/>
+              </linearGradient>
             </defs>
-            <rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.4"/>
+            <rect width="100%" height="100%" fill="url(#hexPattern)"/>
+            <rect width="100%" height="100%" fill="url(#trianglePattern)" opacity="0.5"/>
           </svg>
         </div>
 
-        {/* Moving gradient lines */}
+        {/* Animated neural network connections */}
+        <div className="absolute inset-0 overflow-hidden">
+          <svg className="w-full h-full opacity-10">
+            <g>
+              <circle cx="20%" cy="20%" r="2" fill="#0670e2">
+                <animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="80%" cy="30%" r="2" fill="#0284c7">
+                <animate attributeName="r" values="2;3;2" dur="4s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="60%" cy="70%" r="2" fill="#0ea5e9">
+                <animate attributeName="r" values="2;5;2" dur="5s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="30%" cy="80%" r="2" fill="#0670e2">
+                <animate attributeName="r" values="2;3;2" dur="3.5s" repeatCount="indefinite"/>
+              </circle>
+              
+              <line x1="20%" y1="20%" x2="80%" y2="30%" stroke="#0670e2" strokeWidth="0.5" opacity="0.3">
+                <animate attributeName="stroke-opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite"/>
+              </line>
+              <line x1="80%" y1="30%" x2="60%" y2="70%" stroke="#0284c7" strokeWidth="0.5" opacity="0.3">
+                <animate attributeName="stroke-opacity" values="0.1;0.4;0.1" dur="7s" repeatCount="indefinite"/>
+              </line>
+              <line x1="60%" y1="70%" x2="30%" y2="80%" stroke="#0ea5e9" strokeWidth="0.5" opacity="0.3">
+                <animate attributeName="stroke-opacity" values="0.1;0.6;0.1" dur="5s" repeatCount="indefinite"/>
+              </line>
+              <line x1="30%" y1="80%" x2="20%" y2="20%" stroke="#0670e2" strokeWidth="0.5" opacity="0.3">
+                <animate attributeName="stroke-opacity" values="0.1;0.3;0.1" dur="8s" repeatCount="indefinite"/>
+              </line>
+            </g>
+          </svg>
+        </div>
+
+        {/* Moving gradient lines with better performance */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-1/2 -left-1/2 w-full h-full border border-resumaker-800/20 rounded-full animate-[spin_30s_linear_infinite]"></div>
           <div className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 border border-resumaker-700/15 rounded-full animate-[spin_40s_linear_infinite_reverse]"></div>
@@ -191,7 +236,7 @@ const LandingPage = () => {
             <Button 
               variant="outline" 
               size="lg" 
-              className="border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm px-8 py-4 text-lg font-medium"
+              className="border-white/30 text-gray-900 bg-white/10 hover:bg-white hover:text-black backdrop-blur-sm px-8 py-4 text-lg font-medium transition-all duration-300"
             >
               Посмотреть примеры
             </Button>
