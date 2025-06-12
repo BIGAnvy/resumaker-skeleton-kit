@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -32,7 +31,7 @@ const AIChatWizard = () => {
     {
       id: '1',
       role: 'assistant',
-      content: "Привет! Я AI-ассистент для создания резюме.\n\nЯ помогу создать профессиональное резюме, которое выделит ваши сильные стороны и соответствует современным стандартам.\n\nМожу анализировать документы, оптимизировать под ATS-системы и создавать персонализированный контент.\n\nГотовы начать?",
+      content: "Привет! Я AI-ассистент для создания резюме.\n\nЯ помогу создать профессиональное резюме, которое выделит ваши сильные стороны и соответствует современным стандартам.\n\nМогу анализировать документы, оптимизировать под ATS-системы и создавать персонализированный контент.\n\nГотовы начать?",
       timestamp: new Date(),
     }
   ]);
@@ -201,24 +200,24 @@ const AIChatWizard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto">
         <Card className="border-0 shadow-none bg-transparent">
           {/* Header */}
-          <CardHeader className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
+          <CardHeader className="border-b border-border bg-card/80 backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                  <Brain className="h-6 w-6 text-white" />
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
+                  <Brain className="h-6 w-6 text-primary-foreground" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-semibold text-gray-900">AI Resume Creator</h1>
-                  <p className="text-sm text-gray-500">Создание резюме с искусственным интеллектом</p>
+                  <h1 className="text-2xl font-semibold text-foreground">AI Resume Creator</h1>
+                  <p className="text-sm text-muted-foreground">Создание резюме с искусственным интеллектом</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 {wizardStarted && (
-                  <div className="text-xs text-gray-400 bg-gray-50 px-3 py-1.5 rounded-full">
+                  <div className="text-xs text-muted-foreground bg-muted px-3 py-1.5 rounded-full">
                     {currentStep + 1}/{wizardSteps.length}
                   </div>
                 )}
@@ -228,13 +227,13 @@ const AIChatWizard = () => {
             
             {wizardStarted && (
               <div className="mt-6">
-                <div className="flex justify-between text-xs text-gray-500 mb-2">
+                <div className="flex justify-between text-xs text-muted-foreground mb-2">
                   <span>{wizardSteps[currentStep]?.title}</span>
                   <span>{Math.round(progressValue)}%</span>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-1">
+                <div className="w-full bg-muted rounded-full h-1">
                   <div 
-                    className="h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500"
+                    className="h-1 bg-gradient-to-r from-primary to-purple-600 rounded-full transition-all duration-500"
                     style={{ width: `${progressValue}%` }}
                   />
                 </div>
@@ -254,8 +253,8 @@ const AIChatWizard = () => {
                     className={`
                       max-w-[75%] rounded-2xl px-4 py-3
                       ${message.role === 'user' 
-                        ? 'bg-blue-500 text-white' 
-                        : 'bg-gray-50 text-gray-900 border border-gray-100'
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'bg-muted text-foreground border border-border'
                       }
                     `}
                   >
@@ -263,7 +262,7 @@ const AIChatWizard = () => {
                       {message.role === 'user' ? (
                         <User className="h-3 w-3 mr-2 opacity-70" />
                       ) : (
-                        <Bot className="h-3 w-3 mr-2 text-blue-500" />
+                        <Bot className="h-3 w-3 mr-2 text-primary" />
                       )}
                       <span className="text-xs font-medium opacity-70">
                         {message.role === 'user' ? 'Вы' : 'AI'}
@@ -273,7 +272,7 @@ const AIChatWizard = () => {
                     <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
                     
                     {message.attachments?.length > 0 && (
-                      <div className="mt-2 p-2 rounded-lg bg-white/10">
+                      <div className="mt-2 p-2 rounded-lg bg-background/10">
                         {message.attachments.map((attachment, i) => (
                           <div key={i} className="flex items-center text-xs">
                             <FileText className="h-3 w-3 mr-2" />
@@ -294,7 +293,7 @@ const AIChatWizard = () => {
                 <div className="flex justify-center mt-12">
                   <Button 
                     onClick={handleStartWizard}
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-700 text-primary-foreground px-8 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200"
                     size="lg"
                   >
                     <Play className="h-4 w-4 mr-2" />
@@ -306,13 +305,13 @@ const AIChatWizard = () => {
               
               {isGenerating && (
                 <div className="flex justify-start">
-                  <div className="max-w-[75%] rounded-2xl px-4 py-3 bg-gray-50 border border-gray-100">
+                  <div className="max-w-[75%] rounded-2xl px-4 py-3 bg-muted border border-border">
                     <div className="flex items-center gap-2">
-                      <Bot className="h-3 w-3 text-blue-500" />
+                      <Bot className="h-3 w-3 text-primary" />
                       <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                         <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                       </div>
                     </div>
                   </div>
@@ -325,8 +324,8 @@ const AIChatWizard = () => {
           
           {/* Suggestions */}
           {showSuggestions && wizardStarted && (
-            <div className="px-6 py-3 border-t border-gray-100 bg-gray-50/50">
-              <p className="text-xs font-medium text-gray-500 mb-3">Примеры ответов:</p>
+            <div className="px-6 py-3 border-t border-border bg-muted/50">
+              <p className="text-xs font-medium text-muted-foreground mb-3">Примеры ответов:</p>
               <div className="flex flex-wrap gap-2">
                 {suggestions.map((suggestion, index) => (
                   <Button 
@@ -334,7 +333,7 @@ const AIChatWizard = () => {
                     variant="outline" 
                     size="sm"
                     onClick={() => handleUseSuggestion(suggestion)}
-                    className="text-xs bg-white border-gray-200 text-gray-600 hover:bg-gray-50 rounded-full"
+                    className="text-xs bg-card border-border text-muted-foreground hover:bg-accent rounded-full"
                   >
                     {suggestion}
                   </Button>
@@ -345,7 +344,7 @@ const AIChatWizard = () => {
           
           {/* Input */}
           {wizardStarted && (
-            <CardFooter className="border-t border-gray-100 bg-white p-6">
+            <CardFooter className="border-t border-border bg-card p-6">
               <form 
                 className="flex w-full items-end space-x-3"
                 onSubmit={(e) => {
@@ -370,7 +369,7 @@ const AIChatWizard = () => {
                         variant="outline"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isGenerating}
-                        className="border-gray-200 hover:bg-gray-50 rounded-xl"
+                        className="border-border hover:bg-accent rounded-xl"
                       >
                         <Upload className="h-4 w-4" />
                       </Button>
@@ -382,7 +381,7 @@ const AIChatWizard = () => {
                 <div className="flex-1 relative">
                   <Textarea 
                     placeholder="Ваш ответ..."
-                    className="border-gray-200 focus:border-blue-300 focus:ring-blue-200 resize-none rounded-xl bg-gray-50 focus:bg-white transition-colors"
+                    className="border-border focus:border-primary focus:ring-primary/20 resize-none rounded-xl bg-muted focus:bg-background transition-colors"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -400,7 +399,7 @@ const AIChatWizard = () => {
                         variant="ghost"
                         onClick={() => setShowSuggestions(!showSuggestions)}
                         disabled={isGenerating}
-                        className="text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl"
+                        className="text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl"
                       >
                         <PlusCircle className="h-4 w-4" />
                       </Button>
@@ -413,7 +412,7 @@ const AIChatWizard = () => {
                   type="submit" 
                   size="icon"
                   disabled={isGenerating || !input.trim()}
-                  className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl"
                 >
                   <SendHorizontal className="h-4 w-4" />
                 </Button>

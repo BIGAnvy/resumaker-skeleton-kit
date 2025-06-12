@@ -1,5 +1,5 @@
 
-import { Moon, Sun, Laptop } from 'lucide-react';
+import { Moon, Sun, Laptop, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -90,7 +90,5 @@ export function ThemeToggle() {
     </DropdownMenu>
   );
 }
-
-import { Check } from 'lucide-react';
 
 export default ThemeToggle;

@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -241,7 +240,7 @@ const ResumeAIWizard = () => {
                 <div 
                   className={`
                     max-w-[85%] rounded-lg px-4 py-3
-                    ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted border'}
+                    ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted border border-border'}
                   `}
                 >
                   {message.role === 'user' && (
@@ -253,7 +252,7 @@ const ResumeAIWizard = () => {
                   
                   {message.role === 'assistant' && (
                     <div className="flex items-center mb-1">
-                      <Sparkles className="h-3 w-3 mr-1" />
+                      <Sparkles className="h-3 w-3 mr-1 text-primary" />
                       <span className="text-xs font-medium">AI Помощник</span>
                     </div>
                   )}
@@ -297,7 +296,7 @@ const ResumeAIWizard = () => {
             
             {isGenerating && (
               <div className="flex justify-start">
-                <div className="max-w-[85%] rounded-lg px-4 py-3 bg-muted border">
+                <div className="max-w-[85%] rounded-lg px-4 py-3 bg-muted border border-border">
                   <div className="flex items-center gap-1">
                     <div className="h-1.5 w-1.5 bg-current rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                     <div className="h-1.5 w-1.5 bg-current rounded-full animate-bounce [animation-delay:-0.15s]"></div>
@@ -330,7 +329,7 @@ const ResumeAIWizard = () => {
           </div>
         )}
         
-        <CardFooter className="border-t p-4">
+        <CardFooter className="border-t border-border p-4">
           <div className="w-full space-y-3">
             {wizardStarted && (
               <form 
