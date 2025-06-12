@@ -1,4 +1,3 @@
-
 import AppLayout from '../components/layout/AppLayout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,19 +36,18 @@ const ResumesPage = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="space-y-6 animate-fade-in">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Resumes</h1>
-            <p className="text-muted-foreground mt-1">Manage your resumes</p>
-          </div>
-          <Button onClick={() => navigate("/resume-builder/new")}>
-            <Plus className="mr-2 h-4 w-4" />
-            New Resume
-          </Button>
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Resumes</h1>
+          <p className="text-muted-foreground mt-1">Manage your resumes</p>
         </div>
-        
+        <Button onClick={() => navigate("/resume-builder/new")}>
+          <Plus className="mr-2 h-4 w-4" />
+          New Resume
+        </Button>
+      </div>
+      
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {resumes.map((resume) => (
             <Card key={resume.id} className="cursor-pointer" onClick={() => navigate(`/resume/${resume.id}`)}>
@@ -102,7 +100,6 @@ const ResumesPage = () => {
           </Card>
         </div>
       </div>
-    </AppLayout>
   );
 };
 

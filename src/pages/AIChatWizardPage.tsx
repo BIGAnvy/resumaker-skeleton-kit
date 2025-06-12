@@ -1,13 +1,8 @@
 
-import AppLayout from '../components/layout/AppLayout';
 import AIChatWizard from '../components/ai/AIChatWizard';
 
 const AIChatWizardPage = () => {
-  return (
-    <AppLayout>
-      <AIChatWizard />
-    </AppLayout>
-  );
+  return <AIChatWizard />;
 };
 
 export default AIChatWizardPage;

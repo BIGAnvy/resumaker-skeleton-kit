@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import { Button } from "@/components/ui/button";
@@ -47,110 +46,108 @@ const CoverLetterViewPage = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="space-y-6 animate-fade-in">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">{coverLetter.title}</h1>
-              <p className="text-muted-foreground mt-1">For: {coverLetter.company} • Last modified: {coverLetter.lastModified}</p>
-            </div>
-          </div>
-          <div className="flex space-x-2">
-            <Button variant="outline" onClick={() => navigate(`/cover-letter/${id}`)}>
-              <Edit className="mr-2 h-4 w-4" />
-              Edit Cover Letter
-            </Button>
-            <Button variant="outline" onClick={handleShare}>
-              <Share className="mr-2 h-4 w-4" />
-              Share
-            </Button>
-            <Button onClick={handleDownload}>
-              <Download className="mr-2 h-4 w-4" />
-              Download PDF
-            </Button>
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">{coverLetter.title}</h1>
+            <p className="text-muted-foreground mt-1">For: {coverLetter.company} • Last modified: {coverLetter.lastModified}</p>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Cover Letter</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-white p-8 border rounded-lg min-h-[600px]">
-                  <div className="text-right mb-6">
-                    <p className="text-sm text-muted-foreground">{new Date().toLocaleDateString()}</p>
-                  </div>
-                  
-                  <div className="mb-6">
-                    <p className="mb-1 font-medium">{coverLetter.recipientName}</p>
-                    <p className="mb-1">{coverLetter.company}</p>
-                    <p className="mb-4 text-sm text-muted-foreground">Re: {coverLetter.position} Position</p>
-                  </div>
-                  
-                  <div className="space-y-4 text-sm leading-relaxed">
-                    <p>Dear {coverLetter.recipientName},</p>
-                    <p>{coverLetter.content.introduction}</p>
-                    <p>{coverLetter.content.body}</p>
-                    <p>{coverLetter.content.conclusion}</p>
-                  </div>
-                  
-                  <div className="mt-8">
-                    <p className="mb-1 text-sm">Sincerely,</p>
-                    <p className="font-medium">{coverLetter.senderInfo.name}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Application Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Position</label>
-                  <p className="text-sm">{coverLetter.position}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Company</label>
-                  <p className="text-sm">{coverLetter.company}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Recipient</label>
-                  <p className="text-sm">{coverLetter.recipientName}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Status</label>
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                    Draft
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Your Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="text-sm font-medium">{coverLetter.senderInfo.name}</p>
-                <p className="text-sm text-muted-foreground">{coverLetter.senderInfo.email}</p>
-                <p className="text-sm text-muted-foreground">{coverLetter.senderInfo.phone}</p>
-                <p className="text-sm text-muted-foreground">{coverLetter.senderInfo.address}</p>
-              </CardContent>
-            </Card>
-          </div>
+        <div className="flex space-x-2">
+          <Button variant="outline" onClick={() => navigate(`/cover-letter/${id}`)}>
+            <Edit className="mr-2 h-4 w-4" />
+            Edit Cover Letter
+          </Button>
+          <Button variant="outline" onClick={handleShare}>
+            <Share className="mr-2 h-4 w-4" />
+            Share
+          </Button>
+          <Button onClick={handleDownload}>
+            <Download className="mr-2 h-4 w-4" />
+            Download PDF
+          </Button>
         </div>
       </div>
-    </AppLayout>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Cover Letter</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-white p-8 border rounded-lg min-h-[600px]">
+                <div className="text-right mb-6">
+                  <p className="text-sm text-muted-foreground">{new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <div className="mb-6">
+                  <p className="mb-1 font-medium">{coverLetter.recipientName}</p>
+                  <p className="mb-1">{coverLetter.company}</p>
+                  <p className="mb-4 text-sm text-muted-foreground">Re: {coverLetter.position} Position</p>
+                </div>
+                
+                <div className="space-y-4 text-sm leading-relaxed">
+                  <p>Dear {coverLetter.recipientName},</p>
+                  <p>{coverLetter.content.introduction}</p>
+                  <p>{coverLetter.content.body}</p>
+                  <p>{coverLetter.content.conclusion}</p>
+                </div>
+                
+                <div className="mt-8">
+                  <p className="mb-1 text-sm">Sincerely,</p>
+                  <p className="font-medium">{coverLetter.senderInfo.name}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Application Details</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Position</label>
+                <p className="text-sm">{coverLetter.position}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Company</label>
+                <p className="text-sm">{coverLetter.company}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Recipient</label>
+                <p className="text-sm">{coverLetter.recipientName}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Status</label>
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                  Draft
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Your Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p className="text-sm font-medium">{coverLetter.senderInfo.name}</p>
+              <p className="text-sm text-muted-foreground">{coverLetter.senderInfo.email}</p>
+              <p className="text-sm text-muted-foreground">{coverLetter.senderInfo.phone}</p>
+              <p className="text-sm text-muted-foreground">{coverLetter.senderInfo.address}</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   );
 };
 

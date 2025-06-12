@@ -31,7 +31,7 @@ const AppLayout = () => {
           "flex-1 flex flex-col transition-all duration-300 ease-in-out",
           sidebarCollapsed ? "ml-16" : "ml-64"
         )}>
-          <Header onToggleSidebar={toggleSidebar} sidebarCollapsed={sidebarCollapsed} />
+          <Header toggleSidebar={toggleSidebar} sidebarCollapsed={sidebarCollapsed} />
           
           <main className="flex-1 overflow-auto p-6">
             <Outlet />

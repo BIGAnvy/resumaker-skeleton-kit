@@ -130,7 +130,7 @@ const CoverLetterEditor = () => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px] p-0">
               <ExportOptions 
-                documentType="cover-letter" 
+                documentType="coverLetter" 
                 documentTitle={letterData.title} 
                 onClose={() => setShowExportDialog(false)}
               />
