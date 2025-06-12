@@ -27,10 +27,7 @@ const AppLayout = () => {
       <div className="flex h-screen">
         <Sidebar collapsed={sidebarCollapsed} />
         
-        <div className={cn(
-          "flex-1 flex flex-col transition-all duration-300 ease-in-out",
-          sidebarCollapsed ? "ml-16" : "ml-64"
-        )}>
+        <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out">
           <Header toggleSidebar={toggleSidebar} sidebarCollapsed={sidebarCollapsed} />
           
           <main className="flex-1 overflow-auto p-6">
