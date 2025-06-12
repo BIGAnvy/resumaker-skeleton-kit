@@ -67,6 +67,7 @@ const ResumeBuilder = () => {
       content: {
         jobs: [
           { 
+            id: '1',
             title: 'Senior Software Engineer', 
             company: 'Tech Corp', 
             location: 'Remote',
@@ -85,18 +86,25 @@ const ResumeBuilder = () => {
   const [activeTemplate, setActiveTemplate] = useState('modern');
   const [viewMode, setViewMode] = useState('desktop');
   const [lastSaved, setLastSaved] = useState<Date | null>(new Date());
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showExportDialog, setShowExportDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
+  const [skillsTags, setSkillsTags] = useState(['JavaScript', 'React', 'TypeScript']);
+
+  // Mark as having unsaved changes when data changes
+  useEffect(() => {
+    setHasUnsavedChanges(true);
+  }, [sections, resumeTitle, skillsTags]);
 
   const handleAddSection = (type: SectionType['type']) => {
     const newSection: SectionType = {
       id: `section-${Date.now()}`,
       type,
       title: getDefaultTitle(type),
-      content: {}
+      content: getDefaultContent(type)
     };
     
     setSections([...sections, newSection]);
@@ -117,6 +125,82 @@ const ResumeBuilder = () => {
       custom: 'Custom Section'
     };
     return titles[type];
+  };
+
+  const getDefaultContent = (type: SectionType['type']): Record<string, any> => {
+    switch (type) {
+      case 'contact':
+        return {
+          name: '',
+          email: '',
+          phone: '',
+          location: ''
+        };
+      case 'summary':
+        return {
+          text: ''
+        };
+      case 'experience':
+        return {
+          jobs: [{
+            id: `job-${Date.now()}`,
+            title: '',
+            company: '',
+            location: '',
+            startDate: '',
+            endDate: '',
+            description: ''
+          }]
+        };
+      case 'education':
+        return {
+          institutions: [{
+            id: `edu-${Date.now()}`,
+            degree: '',
+            institution: '',
+            location: '',
+            startDate: '',
+            endDate: '',
+            description: ''
+          }]
+        };
+      case 'skills':
+        return {
+          categories: [{
+            id: `skill-${Date.now()}`,
+            name: 'Technical Skills',
+            skills: []
+          }]
+        };
+      case 'projects':
+        return {
+          projects: [{
+            id: `project-${Date.now()}`,
+            name: '',
+            description: '',
+            technologies: [],
+            link: ''
+          }]
+        };
+      default:
+        return {};
+    }
+  };
+
+  const handleSectionUpdate = (sectionId: string, newContent: Record<string, any>) => {
+    setSections(sections.map(section => 
+      section.id === sectionId 
+        ? { ...section, content: newContent }
+        : section
+    ));
+  };
+
+  const handleDeleteSection = (sectionId: string) => {
+    setSections(sections.filter(section => section.id !== sectionId));
+    toast({
+      title: "Section deleted",
+      description: "Section has been removed from your resume.",
+    });
   };
 
   const handleDragStart = (sectionId: string) => {
@@ -156,6 +240,7 @@ const ResumeBuilder = () => {
       description: "Your resume has been saved successfully.",
     });
     setLastSaved(new Date());
+    setHasUnsavedChanges(false);
   };
 
   const handleAIEnhance = () => {
@@ -235,14 +320,18 @@ const ResumeBuilder = () => {
           />
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" onClick={handleAIEnhance}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             <Sparkles className="h-4 w-4 mr-2" />
             AI Enhance
           </Button>
           <LanguageSelector value={language} onChange={setLanguage} />
-          <Button variant="outline" onClick={handleSave}>
+          <Button 
+            variant={hasUnsavedChanges ? "default" : "outline"} 
+            onClick={handleSave}
+            className={hasUnsavedChanges ? "bg-primary text-primary-foreground" : ""}
+          >
             <Save className="h-4 w-4 mr-2" />
-            Save
+            {hasUnsavedChanges ? "Save Changes" : "Saved"}
           </Button>
           <Dialog open={showExportDialog} onOpenChange={setShowExportDialog}>
             <DialogTrigger asChild>
@@ -285,7 +374,10 @@ const ResumeBuilder = () => {
                   variant="outline" 
                   size="sm" 
                   className="text-xs"
-                  onClick={() => simulateError()}
+                  onClick={() => {
+                    setHasError(true);
+                    setError(new Error("Failed to load template data. Please try again."));
+                  }}
                 >
                   <AlertTriangle className="h-3 w-3 mr-1" />
                   Simulate Error
@@ -295,11 +387,17 @@ const ResumeBuilder = () => {
               {hasError ? (
                 <ErrorFallback
                   error={error}
-                  resetError={resetError}
+                  resetError={() => {
+                    setHasError(false);
+                    setError(null);
+                  }}
                   message="Failed to load resume data"
                   severity="warning"
                   actionText="Retry Loading"
-                  actionFn={resetError}
+                  actionFn={() => {
+                    setHasError(false);
+                    setError(null);
+                  }}
                 />
               ) : (
                 <ScrollArea className="h-full">
@@ -315,7 +413,9 @@ const ResumeBuilder = () => {
                         
                         <ResumeSection 
                           section={section} 
-                          onDragStart={() => handleDragStart(section.id)}
+                          onDragStart={() => setDraggedSection(section.id)}
+                          onUpdate={(content) => handleSectionUpdate(section.id, content)}
+                          onDelete={() => handleDeleteSection(section.id)}
                           showAISuggestions={true}
                         />
                         
@@ -362,10 +462,8 @@ const ResumeBuilder = () => {
                       <CardContent className="p-4">
                         <h3 className="text-sm font-medium mb-2">Skills Tags</h3>
                         <TagInput
-                          tags={['JavaScript', 'React', 'TypeScript']}
-                          onChange={(tags) => {
-                            console.log('Skills updated:', tags);
-                          }}
+                          tags={skillsTags}
+                          onChange={setSkillsTags}
                           suggestions={skillsSuggestions}
                           placeholder="Add a skill..."
                           maxTags={20}
@@ -381,7 +479,12 @@ const ResumeBuilder = () => {
                             Create a public link to share your resume
                           </p>
                         </div>
-                        <Button size="sm" onClick={handleShare} variant="outline">
+                        <Button size="sm" onClick={() => {
+                          toast({
+                            title: "Share link created",
+                            description: "A shareable link has been copied to your clipboard.",
+                          });
+                        }} variant="outline">
                           <Share2 className="h-4 w-4 mr-2" />
                           Share
                         </Button>
@@ -492,6 +595,7 @@ const ResumeBuilder = () => {
                   sections={sections} 
                   language={language} 
                   template={activeTemplate}
+                  skillsTags={skillsTags}
                 />
               </div>
             </ScrollArea>

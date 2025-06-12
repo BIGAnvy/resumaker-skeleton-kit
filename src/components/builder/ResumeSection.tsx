@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Grip, Trash, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
@@ -16,19 +15,70 @@ type SectionProps = {
     content: Record<string, any>;
   };
   onDragStart: () => void;
+  onUpdate: (content: Record<string, any>) => void;
+  onDelete: () => void;
   showAISuggestions?: boolean;
 };
 
-const ResumeSection = ({ section, onDragStart, showAISuggestions = false }: SectionProps) => {
+const ResumeSection = ({ section, onDragStart, onUpdate, onDelete, showAISuggestions = false }: SectionProps) => {
   const [collapsed, setCollapsed] = useState(false);
   
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
   };
 
+  const handleFieldChange = (field: string, value: any) => {
+    const newContent = { ...section.content, [field]: value };
+    onUpdate(newContent);
+  };
+
+  const handleJobChange = (jobIndex: number, field: string, value: any) => {
+    const jobs = [...(section.content.jobs || [])];
+    jobs[jobIndex] = { ...jobs[jobIndex], [field]: value };
+    onUpdate({ ...section.content, jobs });
+  };
+
+  const handleAddJob = () => {
+    const jobs = [...(section.content.jobs || [])];
+    jobs.push({
+      id: `job-${Date.now()}`,
+      title: '',
+      company: '',
+      location: '',
+      startDate: '',
+      endDate: '',
+      description: ''
+    });
+    onUpdate({ ...section.content, jobs });
+  };
+
+  const handleDeleteJob = (jobIndex: number) => {
+    const jobs = [...(section.content.jobs || [])];
+    jobs.splice(jobIndex, 1);
+    onUpdate({ ...section.content, jobs });
+  };
+
+  const handleEducationChange = (eduIndex: number, field: string, value: any) => {
+    const institutions = [...(section.content.institutions || [])];
+    institutions[eduIndex] = { ...institutions[eduIndex], [field]: value };
+    onUpdate({ ...section.content, institutions });
+  };
+
+  const handleAddEducation = () => {
+    const institutions = [...(section.content.institutions || [])];
+    institutions.push({
+      id: `edu-${Date.now()}`,
+      degree: '',
+      institution: '',
+      location: '',
+      startDate: '',
+      endDate: '',
+      description: ''
+    });
+    onUpdate({ ...section.content, institutions });
+  };
+
   const handleAISuggest = (field: string, currentValue: string) => {
-    // In a real app, this would call an AI service to get suggestions
-    // For now, we'll simulate an AI suggestion with predetermined values
     const aiSuggestions: Record<string, string[]> = {
       name: ["John Smith", "Jonathan Doe", "J. Doe"],
       email: ["john.professional@email.com", "j.doe@company.co", "contact@johndoe.dev"],
@@ -44,10 +94,7 @@ const ResumeSection = ({ section, onDragStart, showAISuggestions = false }: Sect
       ]
     };
 
-    // Get suggestions for this field
-    const suggestions = aiSuggestions[field] || ["AI suggestion not available for this field"];
-    
-    return suggestions;
+    return aiSuggestions[field] || ["AI suggestion not available for this field"];
   };
 
   return (
@@ -65,7 +112,7 @@ const ResumeSection = ({ section, onDragStart, showAISuggestions = false }: Sect
           <Button variant="ghost" size="icon" onClick={toggleCollapse}>
             {collapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
           </Button>
-          <Button variant="ghost" size="icon" className="text-destructive">
+          <Button variant="ghost" size="icon" className="text-destructive" onClick={onDelete}>
             <Trash className="h-4 w-4" />
           </Button>
         </div>
@@ -97,7 +144,7 @@ const ResumeSection = ({ section, onDragStart, showAISuggestions = false }: Sect
                             size="sm" 
                             className="w-full justify-start text-xs"
                             onClick={() => {
-                              // In a real app, this would update the actual content
+                              handleFieldChange('name', suggestion);
                               toast({
                                 title: "Suggestion applied",
                                 description: "Name updated with AI suggestion"
@@ -112,54 +159,39 @@ const ResumeSection = ({ section, onDragStart, showAISuggestions = false }: Sect
                   </Popover>
                 )}
               </div>
-              <input type="text" className="w-full px-2 py-1 border border-border rounded-md text-sm" defaultValue={section.content.name} />
+              <input 
+                type="text" 
+                className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                value={section.content.name || ''} 
+                onChange={(e) => handleFieldChange('name', e.target.value)}
+              />
             </div>
             <div>
-              <div className="flex justify-between">
-                <label className="text-xs text-muted-foreground">Email</label>
-                {showAISuggestions && (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-4 w-4 text-primary">
-                        <Sparkles className="h-3 w-3" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80 p-0" align="end">
-                      <div className="p-2 border-b">
-                        <p className="text-sm font-medium">AI Suggestions</p>
-                        <p className="text-xs text-muted-foreground">Choose one of these email formats</p>
-                      </div>
-                      <div className="p-2 space-y-1">
-                        {handleAISuggest('email', section.content.email).map((suggestion, idx) => (
-                          <Button 
-                            key={idx} 
-                            variant="ghost" 
-                            size="sm" 
-                            className="w-full justify-start text-xs"
-                            onClick={() => {
-                              toast({
-                                title: "Suggestion applied",
-                                description: "Email updated with AI suggestion"
-                              });
-                            }}
-                          >
-                            {suggestion}
-                          </Button>
-                        ))}
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                )}
-              </div>
-              <input type="email" className="w-full px-2 py-1 border border-border rounded-md text-sm" defaultValue={section.content.email} />
+              <label className="text-xs text-muted-foreground">Email</label>
+              <input 
+                type="email" 
+                className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                value={section.content.email || ''} 
+                onChange={(e) => handleFieldChange('email', e.target.value)}
+              />
             </div>
             <div>
               <label className="text-xs text-muted-foreground">Phone</label>
-              <input type="tel" className="w-full px-2 py-1 border border-border rounded-md text-sm" defaultValue={section.content.phone} />
+              <input 
+                type="tel" 
+                className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                value={section.content.phone || ''} 
+                onChange={(e) => handleFieldChange('phone', e.target.value)}
+              />
             </div>
             <div>
               <label className="text-xs text-muted-foreground">Location</label>
-              <input type="text" className="w-full px-2 py-1 border border-border rounded-md text-sm" defaultValue={section.content.location} />
+              <input 
+                type="text" 
+                className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                value={section.content.location || ''} 
+                onChange={(e) => handleFieldChange('location', e.target.value)}
+              />
             </div>
           </div>
         )}
@@ -191,6 +223,7 @@ const ResumeSection = ({ section, onDragStart, showAISuggestions = false }: Sect
                             size="sm" 
                             className="w-full mt-1 text-xs"
                             onClick={() => {
+                              handleFieldChange('text', suggestion);
                               toast({
                                 title: "Suggestion applied",
                                 description: "Summary updated with AI suggestion"
@@ -209,92 +242,155 @@ const ResumeSection = ({ section, onDragStart, showAISuggestions = false }: Sect
             <textarea 
               className="w-full px-2 py-1 border border-border rounded-md text-sm mt-1" 
               rows={4}
-              defaultValue={section.content.text}
-            ></textarea>
+              value={section.content.text || ''}
+              onChange={(e) => handleFieldChange('text', e.target.value)}
+            />
           </div>
         )}
         
         {/* Experience section */}
         {section.type === 'experience' && (
           <div className="space-y-4">
-            {section.content.jobs?.map((job: any, index: number) => (
-              <div key={index} className="border border-border rounded-md p-3">
+            {(section.content.jobs || []).map((job: any, index: number) => (
+              <div key={job.id || index} className="border border-border rounded-md p-3">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-muted-foreground">Experience #{index + 1}</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-destructive h-6"
+                    onClick={() => handleDeleteJob(index)}
+                  >
+                    <Trash className="h-3 w-3" />
+                  </Button>
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs text-muted-foreground">Job Title</label>
-                    <input type="text" className="w-full px-2 py-1 border border-border rounded-md text-sm" defaultValue={job.title} />
+                    <input 
+                      type="text" 
+                      className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                      value={job.title || ''} 
+                      onChange={(e) => handleJobChange(index, 'title', e.target.value)}
+                    />
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground">Company</label>
-                    <input type="text" className="w-full px-2 py-1 border border-border rounded-md text-sm" defaultValue={job.company} />
+                    <input 
+                      type="text" 
+                      className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                      value={job.company || ''} 
+                      onChange={(e) => handleJobChange(index, 'company', e.target.value)}
+                    />
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground">Start Date</label>
-                    <input type="text" className="w-full px-2 py-1 border border-border rounded-md text-sm" defaultValue={job.startDate} />
+                    <input 
+                      type="text" 
+                      className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                      value={job.startDate || ''} 
+                      onChange={(e) => handleJobChange(index, 'startDate', e.target.value)}
+                    />
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground">End Date</label>
-                    <input type="text" className="w-full px-2 py-1 border border-border rounded-md text-sm" defaultValue={job.endDate} />
+                    <input 
+                      type="text" 
+                      className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                      value={job.endDate || ''} 
+                      onChange={(e) => handleJobChange(index, 'endDate', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="mt-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs text-muted-foreground">Description</label>
-                    {showAISuggestions && (
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-6 text-xs">
-                            <Sparkles className="h-3 w-3 mr-1" />
-                            Enhance
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-96 p-0" align="end">
-                          <div className="p-2 border-b">
-                            <p className="text-sm font-medium">Enhanced Descriptions</p>
-                            <p className="text-xs text-muted-foreground">Select a more impactful job description</p>
-                          </div>
-                          <div className="p-2 space-y-2">
-                            {handleAISuggest('description', job.description).map((suggestion, idx) => (
-                              <div key={idx} className="border rounded-md p-2">
-                                <p className="text-xs">{suggestion}</p>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm" 
-                                  className="w-full mt-1 text-xs"
-                                  onClick={() => {
-                                    toast({
-                                      title: "Suggestion applied",
-                                      description: "Job description enhanced"
-                                    });
-                                  }}
-                                >
-                                  Use This Description
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    )}
-                  </div>
+                  <label className="text-xs text-muted-foreground">Description</label>
                   <textarea 
                     className="w-full px-2 py-1 border border-border rounded-md text-sm mt-1" 
                     rows={3}
-                    defaultValue={job.description}
-                  ></textarea>
+                    value={job.description || ''}
+                    onChange={(e) => handleJobChange(index, 'description', e.target.value)}
+                  />
                 </div>
               </div>
             ))}
             
-            <Button size="sm" variant="outline" className="w-full">
+            <Button size="sm" variant="outline" className="w-full" onClick={handleAddJob}>
               <Plus className="h-3 w-3 mr-1" />
               Add Job
             </Button>
           </div>
         )}
         
-        {/* Other section types would follow a similar pattern */}
-        {(section.type !== 'contact' && section.type !== 'summary' && section.type !== 'experience') && (
+        {/* Education section */}
+        {section.type === 'education' && (
+          <div className="space-y-4">
+            {(section.content.institutions || []).map((edu: any, index: number) => (
+              <div key={edu.id || index} className="border border-border rounded-md p-3">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-muted-foreground">Education #{index + 1}</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-destructive h-6"
+                    onClick={() => {
+                      const institutions = [...(section.content.institutions || [])];
+                      institutions.splice(index, 1);
+                      onUpdate({ ...section.content, institutions });
+                    }}
+                  >
+                    <Trash className="h-3 w-3" />
+                  </Button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-muted-foreground">Degree</label>
+                    <input 
+                      type="text" 
+                      className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                      value={edu.degree || ''} 
+                      onChange={(e) => handleEducationChange(index, 'degree', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground">Institution</label>
+                    <input 
+                      type="text" 
+                      className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                      value={edu.institution || ''} 
+                      onChange={(e) => handleEducationChange(index, 'institution', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground">Start Date</label>
+                    <input 
+                      type="text" 
+                      className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                      value={edu.startDate || ''} 
+                      onChange={(e) => handleEducationChange(index, 'startDate', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground">End Date</label>
+                    <input 
+                      type="text" 
+                      className="w-full px-2 py-1 border border-border rounded-md text-sm" 
+                      value={edu.endDate || ''} 
+                      onChange={(e) => handleEducationChange(index, 'endDate', e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            <Button size="sm" variant="outline" className="w-full" onClick={handleAddEducation}>
+              <Plus className="h-3 w-3 mr-1" />
+              Add Education
+            </Button>
+          </div>
+        )}
+        
+        {/* Other section types */}
+        {(section.type !== 'contact' && section.type !== 'summary' && section.type !== 'experience' && section.type !== 'education') && (
           <div className="h-20 flex items-center justify-center text-muted-foreground text-sm">
             {section.title} section editor placeholder
           </div>

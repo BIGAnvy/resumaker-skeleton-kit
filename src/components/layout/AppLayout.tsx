@@ -1,27 +1,42 @@
 
-import { ReactNode, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import { cn } from '@/lib/utils';
 
-type AppLayoutProps = {
-  children: ReactNode;
-};
-
-const AppLayout = ({ children }: AppLayoutProps) => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
+const AppLayout = () => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true); // Changed default to true
+  
+  // Check localStorage for saved sidebar state
+  useEffect(() => {
+    const savedState = localStorage.getItem('sidebar-collapsed');
+    if (savedState !== null) {
+      setSidebarCollapsed(JSON.parse(savedState));
+    }
+  }, []);
+  
   const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
+    const newState = !sidebarCollapsed;
+    setSidebarCollapsed(newState);
+    localStorage.setItem('sidebar-collapsed', JSON.stringify(newState));
   };
 
   return (
-    <div className="resumaker-layout">
-      <Sidebar collapsed={sidebarCollapsed} />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Header toggleSidebar={toggleSidebar} sidebarCollapsed={sidebarCollapsed} />
-        <main className="resumaker-content p-4 md:p-6">
-          {children}
-        </main>
+    <div className="min-h-screen bg-background">
+      <div className="flex h-screen">
+        <Sidebar collapsed={sidebarCollapsed} />
+        
+        <div className={cn(
+          "flex-1 flex flex-col transition-all duration-300 ease-in-out",
+          sidebarCollapsed ? "ml-16" : "ml-64"
+        )}>
+          <Header onToggleSidebar={toggleSidebar} sidebarCollapsed={sidebarCollapsed} />
+          
+          <main className="flex-1 overflow-auto p-6">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   );
