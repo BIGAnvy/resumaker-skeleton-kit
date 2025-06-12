@@ -3,11 +3,7 @@ import AppLayout from '../components/layout/AppLayout';
 import Settings from '../components/settings/Settings';
 
 const SettingsPage = () => {
-  return (
-    <AppLayout>
-      <Settings />
-    </AppLayout>
-  );
+  return <Settings />;
 };
 
 export default SettingsPage;
