@@ -1,4 +1,3 @@
-
 import Settings from '../components/settings/Settings';
 
 const SettingsPage = () => {
