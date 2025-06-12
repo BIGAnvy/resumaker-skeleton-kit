@@ -1,5 +1,4 @@
 
-import AppLayout from '../components/layout/AppLayout';
 import Settings from '../components/settings/Settings';
 
 const SettingsPage = () => {

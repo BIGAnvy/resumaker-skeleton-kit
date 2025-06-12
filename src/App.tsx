@@ -20,6 +20,7 @@ import LocalizationSettingsPage from "./pages/LocalizationSettingsPage";
 import AIChatWizardPage from "./pages/AIChatWizardPage";
 import AIResumeWizardPage from "./pages/AIResumeWizardPage";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage";
+import AppLayout from "./components/layout/AppLayout";
 
 const queryClient = new QueryClient();
 
@@ -31,22 +32,24 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/resumes" element={<ResumesPage />} />
-          <Route path="/resume/:id" element={<ResumeViewPage />} />
-          <Route path="/cover-letters" element={<CoverLettersPage />} />
-          <Route path="/cover-letter/:id/view" element={<CoverLetterViewPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/resume-builder/:id" element={<ResumeBuilderPage />} />
-          <Route path="/resume-builder/new" element={<ResumeBuilderPage />} />
-          <Route path="/cover-letter/:id" element={<CoverLetterEditorPage />} />
-          <Route path="/cover-letter/new" element={<CoverLetterEditorPage />} />
-          <Route path="/templates" element={<TemplateGalleryPage />} />
-          <Route path="/settings/localization" element={<LocalizationSettingsPage />} />
-          <Route path="/settings/profile" element={<ProfileSettingsPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/ai-wizard" element={<AIChatWizardPage />} />
-          <Route path="/ai-resume" element={<AIResumeWizardPage />} />
+          <Route path="/*" element={<AppLayout />}>
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="resumes" element={<ResumesPage />} />
+            <Route path="resume/:id" element={<ResumeViewPage />} />
+            <Route path="cover-letters" element={<CoverLettersPage />} />
+            <Route path="cover-letter/:id/view" element={<CoverLetterViewPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="resume-builder/:id" element={<ResumeBuilderPage />} />
+            <Route path="resume-builder/new" element={<ResumeBuilderPage />} />
+            <Route path="cover-letter/:id" element={<CoverLetterEditorPage />} />
+            <Route path="cover-letter/new" element={<CoverLetterEditorPage />} />
+            <Route path="templates" element={<TemplateGalleryPage />} />
+            <Route path="settings/localization" element={<LocalizationSettingsPage />} />
+            <Route path="settings/profile" element={<ProfileSettingsPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="ai-wizard" element={<AIChatWizardPage />} />
+            <Route path="ai-resume" element={<AIResumeWizardPage />} />
+          </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
